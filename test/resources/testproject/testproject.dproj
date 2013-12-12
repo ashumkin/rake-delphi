@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{af8ea221-1e83-4b10-930b-73b0e6f4b239}</ProjectGuid>
+    <MainSource>testproject.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>testproject.exe</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_Define>DEBUG</DCC_Define>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject> <Delphi.Personality>   <Parameters>
+      <Parameters Name="UseLauncher">False</Parameters>
+      <Parameters Name="LoadAllSymbols">True</Parameters>
+      <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+    </Parameters>
+    <VersionInfo>
+      <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+      <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+      <VersionInfo Name="MajorVer">4</VersionInfo>
+      <VersionInfo Name="MinorVer">3</VersionInfo>
+      <VersionInfo Name="Release">2</VersionInfo>
+      <VersionInfo Name="Build">1</VersionInfo>
+      <VersionInfo Name="Debug">False</VersionInfo>
+      <VersionInfo Name="PreRelease">False</VersionInfo>
+      <VersionInfo Name="Special">False</VersionInfo>
+      <VersionInfo Name="Private">False</VersionInfo>
+      <VersionInfo Name="DLL">False</VersionInfo>
+      <VersionInfo Name="Locale">1049</VersionInfo>
+      <VersionInfo Name="CodePage">1251</VersionInfo>
+    </VersionInfo>
+    <VersionInfoKeys>
+      <VersionInfoKeys Name="CompanyName">Rake</VersionInfoKeys>
+      <VersionInfoKeys Name="FileDescription">Test rake-delphi project 2007 description</VersionInfoKeys>
+      <VersionInfoKeys Name="FileVersion">4.3.2.1</VersionInfoKeys>
+      <VersionInfoKeys Name="InternalName">testproject.exe</VersionInfoKeys>
+      <VersionInfoKeys Name="LegalCopyright">Copyright. Копирайт</VersionInfoKeys>
+      <VersionInfoKeys Name="LegalTrademarks">Trademark. Торговая марка</VersionInfoKeys>
+      <VersionInfoKeys Name="OriginalFilename">testproject.exe</VersionInfoKeys>
+      <VersionInfoKeys Name="ProductName">Test rake-delphi project 2007 product name</VersionInfoKeys>
+      <VersionInfoKeys Name="ProductVersion">1.2.3.4</VersionInfoKeys>
+      <VersionInfoKeys Name="Comments">Test project comment</VersionInfoKeys>
+    </VersionInfoKeys>
+    <Excluded_Packages>
+      <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\5.0\Bpl\rxctl110.bpl">RX Library Component and Tools Package</Excluded_Packages>
+      <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\5.0\Bpl\JclDeveloperTools110.bpl">JEDI Code Library Developer Tools package</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dcloffice2k100.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="$(BDS)\bin\dclofficexp100.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+      <Excluded_Packages Name="c:\Program Files\FastReports\FastReport 4\LibD11\frxDB11.bpl">(untitled)</Excluded_Packages>
+    </Excluded_Packages>
+    <Source>
+      <Source Name="MainSource">testproject.dpr</Source>
+    </Source>
+  </Delphi.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="testproject.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+  </ItemGroup>
+</Project>
