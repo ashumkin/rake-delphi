@@ -84,14 +84,18 @@ module Rake
         def self.readDelphiDir(ver)
             begin
                 require 'win32/registry'
-                begin
-                    ::Win32::Registry::HKEY_LOCAL_MACHINE.open(rootForVersion(ver)) do |reg|
-                        reg_typ, reg_val = reg.read('RootDir')
-                        return reg_val.gsub('\\', '/')
+                [::Win32::Registry::HKEY_LOCAL_MACHINE, \
+                        # for local/manual installations
+                        ::Win32::Registry::HKEY_CURRENT_USER].each do |regRoot|
+                    begin
+                        regRoot.open(rootForVersion(ver)) do |reg|
+                            reg_typ, reg_val = reg.read('RootDir')
+                            return reg_val.gsub('\\', '/')
+                        end
+                    rescue ::Win32::Registry::Error
                     end
-                rescue ::Win32::Registry::Error
-                    return nil
                 end
+                return nil
             rescue LoadError
                 return nil
             end
