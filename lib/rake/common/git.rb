@@ -7,7 +7,7 @@ module Rake
   module Delphi
     class Git
         def self.version
-            null = Rake.cygwin? ? '/dev/null' : 'nil'
+            null = Rake.cygwin? ? '/dev/null' : 'nul'
             r = `git rev-parse 1>#{null} 2>&1 && git describe --abbrev=1 2>#{null}`
             # trim
             r.chomp!
