@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'logger'
 
 class Logger
     class Formatter

@@ -1,6 +1,5 @@
 # encoding: utf-8
-
-require 'logger'
+require 'rake'
 require 'rake/helpers/logger'
 
 # extend Rake task with a logger

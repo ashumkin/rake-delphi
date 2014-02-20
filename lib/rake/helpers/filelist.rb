@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'rake'
 
 module Rake
     class FileList

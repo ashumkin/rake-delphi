@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'rake'
 
 # extend Rake task with a `set_non_standard_vars` method
 module Rake
