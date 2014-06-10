@@ -245,7 +245,11 @@ module Rake
                         unless @usecfg
                             cfg = @systempath.pathmap('%X.cfg')
                             bak_cfg = @systempath.pathmap('%X.rake.cfg')
-                            mv cfg, bak_cfg
+                            if File.exists?(cfg)
+                                mv cfg, bak_cfg
+                            else
+                                warn "WARNING! Config #{cfg} is absent!"
+                            end
                             if @altercfg
                                 cp @altercfg, cfg
                             end
@@ -263,7 +267,7 @@ module Rake
                             begin
                                 cp cfg, cfg + '.1' if trace?
                             ensure
-                                mv bak_cfg, cfg
+                                mv bak_cfg, cfg if File.exists?(bak_cfg)
                             end
                         end
                     end

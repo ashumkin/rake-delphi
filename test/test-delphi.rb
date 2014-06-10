@@ -113,6 +113,18 @@ public
             'testproject works-=CONFIG=-')
     end
 
+    def test_compile_use_absent_config
+        RakeFileUtils.verbose(Rake::Delphi::Logger.debug?) do
+            mv PROJECT_PATH.pathmap('%p%s%f.cfg'), PROJECT_PATH.pathmap('%p%s%f.absent.cfg')
+            begin
+                _test_compile_and_output({:usecfg => true},
+                    'testproject works')
+            ensure
+                mv PROJECT_PATH.pathmap('%p%s%f.absent.cfg'), PROJECT_PATH.pathmap('%p%s%f.cfg')
+            end
+        end
+    end
+
     def test_compile_use_library_path
         # usually Indy components are in Delphi library paths
         _test_compile_and_output({:defines => 'INDY', :uselibrarypath => true},
