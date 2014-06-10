@@ -8,7 +8,29 @@ module Rake
             ENV['DELPHI_VERSION']
         end
 
+        def readreg(regpath)
+            return unless regpath
+            begin
+                require 'win32/registry'
+                Logger.trace(Logger::DEBUG, "Reading environment variables from '#{regpath}'")
+                begin
+                    ::Win32::Registry::HKEY_CURRENT_USER.open(regpath) do |reg|
+                        reg.each do |name|
+                            reg_type, value = reg.read(name)
+                            value.gsub!('\\', '/')
+                            add(name, value)
+                        end
+                    end
+                rescue ::Win32::Registry::Error
+                    Logger.trace(Logger::DEBUG, "No reg key '%s'?!" % regpath)
+                end
+            rescue LoadError
+                Logger.trace(Logger::DEBUG, 'No `win32/registry` gem?!')
+            end
+        end
+
         def initialize(regpath, delphidir)
+            readreg(regpath)
             _dir = delphidir.gsub(/\/$/, '')
             add('DELPHI', _dir)
             add('BDS', _dir)
