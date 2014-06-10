@@ -14,14 +14,6 @@ public
         File.unlink(@zip) if File.exists?(@zip)
     end
 
-    def test_zip_no_task
-        assert_raise NoMethodError do
-            # first argument must be a Rake::Task
-            # "undefined method `application' for nil:NilClass" must be raised
-            Rake::Delphi::ZipTask.new(nil, nil, nil)
-        end
-    end
-
     def test_zip_no_filename
         assert_raise RuntimeError do
             # second argument must be non-empty

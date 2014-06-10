@@ -2,6 +2,7 @@
 
 require 'rake'
 require 'rake/common/chdirtask'
+require 'rake/common/logger'
 require 'rake/delphi/envvariables'
 require 'rake/delphi/resources'
 require 'rake/delphi/tool'
@@ -25,6 +26,7 @@ module Rake
                 end
                 lp
             end
+            Logger.trace(Logger::TRACE, libpaths)
             return libpaths
         end
     end
@@ -164,7 +166,7 @@ module Rake
 
     public
         def init(properties)
-            pp properties if trace?
+            Logger.trace(Logger::TRACE, properties)
             properties.map do |key, value|
                 instance_variable_set("@#{key}", value)
             end
@@ -223,7 +225,7 @@ module Rake
             cmd = Rake.quotepath('', @dcc32Tool.toolpath)
             cmd << ([''] | args).join(' ')
             ChDir.new(self, File.dirname(@_source)) do |dir|
-                RakeFileUtils.verbose(trace?) do
+                RakeFileUtils.verbose(Logger.debug?) do
                     begin
                         unless @usecfg
                             cfg = @systempath.pathmap('%X.cfg')

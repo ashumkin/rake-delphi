@@ -21,6 +21,7 @@ module Rake
             add('DELPHI', _dir)
             add('BDS', _dir)
             expand_vars
+            Logger.trace(Logger::TRACE, self)
         end
 
         def add(var, value)

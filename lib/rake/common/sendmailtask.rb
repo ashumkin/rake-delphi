@@ -15,7 +15,7 @@ module Rake
                 cmd += "#{predefined[k]} #{opts[k]} " if opts[k]
             end
             cmd = "#{sendmail} -i #{cmd}"
-            pp cmd if trace?
+            Logger.trace(Logger::VERBOSE, cmd)
             if @task.application.windows? && Rake.ruby18?
                 require 'win32/open3'
             else

@@ -7,7 +7,6 @@ require 'rake/delphi/dcc32'
 require 'rake/helpers/file'
 require 'rake/helpers/raketask'
 require 'rake/helpers/string'
-require 'pp'
 
 module Rake
   module Delphi

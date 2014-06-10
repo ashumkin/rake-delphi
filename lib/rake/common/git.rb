@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'rake/common/classes'
+require 'rake/common/logger'
 require 'rake/helpers/rake'
 
 module Rake
@@ -52,7 +53,7 @@ module Rake
             cmd = ['git']
             cmd << "-c i18n.logOutputEncoding=#{opts[:logoutputencoding]}" if opts[:logoutputencoding]
             cmd << 'log' << '--format=%B' << "#{opts[:since]}..HEAD"
-            p cmd if trace?
+            Logger.trace(Logger::VERBOSE, cmd)
             @changelog=%x[#{cmd.join(' ')}].lines.to_a
             @changelog.map! do |line|
                 line.chomp!
@@ -69,7 +70,7 @@ module Rake
             @changelog.uniq!
             do_filter
             do_process
-            puts @changelog if trace?
+            Logger.trace(Logger::TRACE, @changelog)
         end
 
         def charset

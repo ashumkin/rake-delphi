@@ -2,6 +2,7 @@
 
 require 'erb'
 require 'rake/common/classes'
+require 'rake/common/logger'
 require 'rake/delphi/rc'
 require 'rake/helpers/gemversion'
 require 'rake/helpers/rake'
@@ -117,7 +118,7 @@ module Rake
             opts = { :args => a }
             opts.merge!(args)
             cmd = ([Rake.quotepath('', tool)] | opts[:args]).join(' ')
-            RakeFileUtils.verbose(trace?) do
+            RakeFileUtils.verbose(Logger.debug?) do
                 sh cmd
             end
         end
