@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'rake/common/exectask'
+require 'rake/common/logger'
 require 'rake/delphi/projectinfo'
 require 'rake/delphi/envvariables'
 
@@ -15,6 +16,7 @@ module Rake
         def self.reinit
             @@version, @@delphidir, @@toolpath = nil, nil, nil
         end
+
         reinit
 
         def initialize
@@ -45,15 +47,21 @@ module Rake
             begin
                 require 'win32/registry'
                 root = rootForVersion(ver) + '\\' + key
+                key_exists = false
                 begin
+                    Logger.trace(Logger::DEBUG, "Reading user option '#{name}' in '#{root}'")
                     ::Win32::Registry::HKEY_CURRENT_USER.open(root) do |reg|
+                        key_exists = true
                         reg_typ, reg_val = reg.read(name)
                         return reg_val.gsub('\\', '/')
                     end
                 rescue ::Win32::Registry::Error
+                    Logger.trace(Logger::DEBUG, "No reg key '%s'?!" % \
+                      (key_exists ? "#{root}\\#{name}" : root))
                     return ''
                 end
             rescue LoadError
+                Logger.trace(Logger::DEBUG, 'No `win32/registry` gem?!')
                 return ''
             end
         end
@@ -79,7 +87,9 @@ module Rake
                 end
             end
             version = version4version(version)
-            return regRoot + '\\' + version
+            regRoot = regRoot + '\\' + version
+            Logger.trace(Logger::DEBUG, "Root for version #{version}: '#{regRoot}'")
+            return regRoot
         end
 
         def self.readDelphiDir(ver)
@@ -89,15 +99,18 @@ module Rake
                         # for local/manual installations
                         ::Win32::Registry::HKEY_CURRENT_USER].each do |regRoot|
                     begin
+                        Logger.trace(Logger::DEBUG, "Finding Delphi dir for #{ver}")
                         regRoot.open(rootForVersion(ver)) do |reg|
                             reg_typ, reg_val = reg.read('RootDir')
                             return reg_val.gsub('\\', '/')
                         end
                     rescue ::Win32::Registry::Error
+                        Logger.trace(Logger::DEBUG, "No reg key '#{regRoot}'?!")
                     end
                 end
                 return nil
             rescue LoadError
+                Logger.trace(Logger::DEBUG, 'No `win32/registry` gem?!')
                 return nil
             end
         end
@@ -105,6 +118,7 @@ module Rake
         def self.find(failIfNotFound = false)
             v = EnvVariables.delphi_version
             if ENV['DELPHI_DIR']
+                Logger.trace(Logger::DEBUG, 'DELPHI_DIR is set: ' + ENV['DELPHI_DIR'])
                 # append trailing path delimiter
                 ENV['DELPHI_DIR'] = ENV['DELPHI_DIR'].gsub(/[^\/]$/, '\&/')
                 tool = ENV['DELPHI_DIR'] + toolName
@@ -116,6 +130,7 @@ module Rake
                 (4..14).each { |n| v << n.to_s }
                 v.reverse!
             else
+                Logger.trace(Logger::DEBUG, 'DELPHI_VERSION is set: ' + v)
                 v = [v]
             end
             v.each do |ver|
@@ -125,6 +140,8 @@ module Rake
                 if File.exists?(tool) # found it !
                     ENV['DELPHI_VERSION'] = ver
                     ENV['DELPHI_DIR'] = path
+                    Logger.trace(Logger::DEBUG, "Set: DELPHI_VERSION=#{ver}; DELPHI_DIR='#{path}'")
+                    Logger.trace(Logger::DEBUG, "Tool: '#{tool}'")
                     return ver, path, tool
                 end
             end
