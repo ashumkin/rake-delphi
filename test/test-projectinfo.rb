@@ -25,7 +25,7 @@ module DelphiTests
 class TestBDSVersionInfo < TestVerInfo
 private
     def version
-        2006
+        '2006'
     end
 protected
     def delphi_version
@@ -46,12 +46,12 @@ public
     def test_info
         assert_equal '4.3.2.1', @info['FileVersion']
         assert_equal 'Rake', @info['CompanyName']
-        assert_equal 'Test rake-delphi project %d description' % version, @info['FileDescription']
+        assert_equal 'Test rake-delphi project %s description' % version, @info['FileDescription']
         assert_equal 'testproject.exe', @info['InternalName']
         assert_equal 'Copyright. Копирайт', @info['LegalCopyright']
         assert_equal 'Trademark. Торговая марка', @info['LegalTrademarks']
         assert_equal 'testproject.exe', @info['OriginalFilename']
-        assert_equal 'Test rake-delphi project %d product name' % version, @info['ProductName']
+        assert_equal 'Test rake-delphi project %s product name' % version, @info['ProductName']
         assert_equal '1.2.3.4', @info['ProductVersion']
         assert_equal 'Test project comment', @info['Comments']
     end
@@ -60,7 +60,7 @@ end
 class TestRAD2007VersionInfo < TestBDSVersionInfo
 private
     def version
-        2007
+        '2007'
     end
 protected
     def do_getinfo
