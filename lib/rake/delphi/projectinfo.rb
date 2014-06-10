@@ -32,18 +32,23 @@ module Rake
     class BDSVersionInfo < ProjectVersionInfo
         def initialize(task)
             super(task)
-            content = @content['Delphi.Personality']['VersionInfoKeys']['VersionInfoKeys']
+            versioninfo = get_versioninfo_tag(@content)
+            versioninfo = versioninfo['Delphi.Personality']['VersionInfoKeys']['VersionInfoKeys']
             use_encode = String.new.respond_to?(:encode)
             encoding = self.class.encoding
             if encoding && ! use_encode
                 require 'iconv'
                 iconv = Iconv.new(encoding, 'UTF-8')
             end
-            content.each do |v|
+            versioninfo.each do |v|
                 cv = v['content']
                 cv = (use_encode ? cv.encode(encoding, 'UTF-8') : iconv.iconv(cv)) if encoding
                 @info[v['Name'].to_sym] = cv
             end
+        end
+
+        def get_versioninfo_tag(content)
+            return content
         end
 
         def self.encoding
@@ -65,10 +70,9 @@ module Rake
             return 'dproj'
         end
 
-        def do_getcontent
-            super
+        def get_versioninfo_tag(content)
             # .dproj file has more nesting levels
-            @content = @content['ProjectExtensions']['BorlandProject']['BorlandProject']
+            return content['ProjectExtensions']['BorlandProject']['BorlandProject']
         end
     end
 
