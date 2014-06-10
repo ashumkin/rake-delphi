@@ -1,17 +1,9 @@
 # encoding: utf-8
+require 'rake/common/logger'
 
 module Rake
   module Delphi
-    class EnvVariable
-        attr_reader :name
-        attr_accessor :value
-
-        def initialize(name, value)
-            @name, @value = name, value
-        end
-    end
-
-    class EnvVariables < ::Array
+    class EnvVariables < ::Hash
         def self.delphi_version
             ENV['DELPHI_VERSION']
         end
@@ -25,20 +17,19 @@ module Rake
         end
 
         def add(var, value)
-            self << EnvVariable.new(var, value)
+            self[var] = value
         end
 
         def expand(value)
-            self.each do |ev|
-                value.gsub!("$(#{ev.name})", ev.value)
+            self.each do |name, val|
+                value.gsub!("$(#{name})", val)
             end
             value
         end
 
         def expand_vars
-            self.map! do |v|
-                v.value = expand(v.value)
-                v
+            self.each do |name, value|
+                self[name] = expand(value)
             end
         end
     end
