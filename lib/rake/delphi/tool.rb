@@ -19,8 +19,8 @@ module Rake
 
         reinit
 
-        def initialize
-            @@version, @@delphidir, @@toolpath = self.class.find unless @@version
+        def initialize(checkExistance = false)
+            @@version, @@delphidir, @@toolpath = self.class.find(checkExistance) unless @@version
         end
 
         def self.toolName

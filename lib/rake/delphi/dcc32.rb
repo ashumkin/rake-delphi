@@ -55,6 +55,13 @@ module Rake
             @dcc32Tool = Dcc32Tool.new
         end
 
+        # used in tests
+        def reenable
+            # recreate Dcc32Tool to reinitialize paths to tool
+            @dcc32Tool = Dcc32Tool.new(true)
+            super
+        end
+
         def versionInfoClass
             @dcc32Tool.versionInfoClass
         end

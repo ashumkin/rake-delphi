@@ -8,10 +8,11 @@ require 'rake/delphi/project'
 require 'rake/delphi/tool'
 require 'rake/helpers/unittest'
 require 'helpers/consts'
+require 'helpers/verinfo'
 
 module DelphiTests
 
-class TestDelphi <  Test::Unit::TestCase
+class TestDelphi < TestVerInfo
 private
     def reenable_tasks(task)
         return unless task.class <= Rake::Task
@@ -54,13 +55,16 @@ private
     def exe
         return PROJECT_EXE % name.gsub(/[():]/, '_')
     end
+
 public
     def setup
+        Rake::Delphi::Dcc32Tool.reinit
+        ENV['DELPHI_DIR'] = nil
+        super
         ENV['RAKE_DIR'] = PROJECT_PATH
         File.unlink(exe) if File.exists?(exe)
         res = PROJECT_PATH + '/resources.res'
         File.unlink(res) if File.exists?(res)
-#        assert(! File.exists?(exe), 'File %s exists' % exe)
         require PROJECT_PATH + '/Rakefile.rb'
     end
 

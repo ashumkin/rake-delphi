@@ -7,6 +7,7 @@ require 'rake/delphi/projectinfo'
 require 'rake/delphi/dcc32'
 require 'rake/helpers/unittest'
 require 'helpers/consts'
+require 'helpers/verinfo'
 
 module Rake
     module Delphi
@@ -21,16 +22,25 @@ end
 
 module DelphiTests
 
-class TestBDSVersionInfo <  Test::Unit::TestCase
+class TestBDSVersionInfo < TestVerInfo
 private
     def version
         2006
     end
+protected
+    def delphi_version
+        return '10'
+    end
+
+    def do_getinfo
+        @info = Rake::Delphi::BDSVersionInfo.new(@rake_task)
+    end
 public
     def setup
+        super
         @rake_task = Rake::Delphi::Dcc32Task.new('some-task-' + name, Rake.application)
         @rake_task.systempath = PROJECT_PATH + '/testproject.dpr'
-        @info = Rake::Delphi::BDSVersionInfo.new(@rake_task)
+        do_getinfo
     end
 
     def test_info
@@ -52,12 +62,14 @@ private
     def version
         2007
     end
-public
-    def setup
-        super
+protected
+    def do_getinfo
         @info = Rake::Delphi::RAD2007VersionInfo.new(@rake_task)
     end
-
+    def delphi_version
+        return '11'
+    end
+public
     def test_info
         super
     end
