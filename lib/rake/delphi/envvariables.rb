@@ -45,7 +45,8 @@ module Rake
 
         def expand_global(value)
             value.gsub!(/\$\((?'env_name'\w+)\)/) do |match|
-                ENV[Regexp.last_match[:env_name]] || match
+                name = Regexp.last_match[:env_name].upcase
+                ENV[name] || match
             end
             value
         end

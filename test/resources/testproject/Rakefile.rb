@@ -32,6 +32,9 @@ namespace :test do
         _task = Rake::Task['test:compile']
         dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.shortname + ':delphi').to_sym)
         dpr[:resources_additional] = 'resources' if opts[:useresources]
+        if ENV['DELPHI_VERSION'].to_i >= 14
+            dpr[:platform] = 'Win32'
+        end
         options = opts[:options] || {}
         if options.kind_of?(String)
             options = eval(options)

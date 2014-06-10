@@ -9,6 +9,7 @@ class TestEnvVariables < Test::Unit::TestCase
 
     def setup
         ENV['BDS_PLATFORM'] = 'BDS platform'
+        ENV['BDS_PLATFORM_CASE'] = 'BDS platform case'
     end
 
     def test_expands
@@ -16,6 +17,7 @@ class TestEnvVariables < Test::Unit::TestCase
         assert_equal('c:/delphi directory', env_vars['BDS'])
         assert_equal('c:/delphi directory/Lib', env_vars['BDSLIB'])
         assert_equal('Platform: BDS platform', env_vars.expand('Platform: $(BDS_PLATFORM)'))
+        assert_equal('Platform: BDS platform case', env_vars.expand('Platform: $(bds_platform_case)'))
         assert_equal('Env: $(BDS_NON_EXISTANT)', env_vars.expand('Env: $(BDS_NON_EXISTANT)'))
     end
 end

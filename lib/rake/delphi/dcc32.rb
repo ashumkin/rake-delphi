@@ -24,9 +24,14 @@ module Rake
             ENV['BDSLIB']
         end
 
-        def readLibraryPaths
-            libpaths = self.class.readUserOption('Library', 'Search Path', self.version).split(';') \
+        def readLibraryPaths(platform)
+            warn "WARNING! You are using Delphi XE or above but no platform defined!" if ENV['DELPHI_VERSION'].to_i >= 14 && ! platform
+
+            platform = platform.to_s != '' ? '\\' + platform : ''
+            # platform not used for old Delphis 'SearchPath'
+            libpaths = self.class.readUserOption('Library' + platform, 'Search Path', self.version).split(';') \
                 | self.class.readUserOption('Library', 'SearchPath', self.version).split(';')
+            Logger.trace(Logger::TRACE, libpaths)
             dev = EnvVariables.new(self.class.rootForVersion(self.version) + '\Environment Variables', self.delphidir)
             libpaths.map! do |lp|
                 unless lp.to_s.empty?
@@ -46,7 +51,7 @@ module Rake
         @@symbols = [:quiet, :assertions, :build, :optimization, :debug, :defines,
             :debuginfo, :localsymbols, :console, :warnings, :hints, :altercfg,
             :includepaths, :writeableconst,
-            :map, :dcuoutput, :bploutput,
+            :map, :dcuoutput, :bploutput, :aliases, :platform, :namespaces,
             :dcpoutput, :dcu, :uselibrarypath, :uselibrarypath, :usecfg]
     public
         @@symbols.map do |sym|
@@ -60,6 +65,7 @@ module Rake
             @rc_template_task = application.define_task(RCTemplateTask, shortname + ':rc:template')
             @rc_task = application.define_task(RCTask, shortname + ':rc')
             enhance([@rc_template_task, @rc_task])
+            @platform = nil
             @dcc32Tool = Dcc32Tool.new
         end
 
@@ -83,7 +89,19 @@ module Rake
         end
 
         def delphilibs
-            return [@dcc32Tool.delphilib] | @dcc32Tool.readLibraryPaths
+            return [@dcc32Tool.delphilib] | @dcc32Tool.readLibraryPaths(@platform)
+        end
+
+        def platform=(value)
+            @platform = value
+            Logger.trace(Logger::DEBUG, 'PLATFORM set: ' + value)
+            ENV['PLATFORM'] = @platform
+            # for XE and above set default aliases and namespaces
+            if ENV['DELPHI_VERSION'].to_i >= 14
+                @aliases = 'Generics.Collections=System.Generics.Collections;Generics.Defaults=System.Generics.Defaults;WinTypes=Winapi.Windows;WinProcs=Winapi.Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE'
+                @namespaces = 'Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;System;Xml;Data;Datasnap;Web;Soap'
+                Logger.trace(Logger::TRACE, 'Aliases and namespaces are set for Delphi XE')
+            end
         end
 
         def _paths(ppaths)
@@ -130,6 +148,14 @@ module Rake
             return @quiet ? '-Q' : ''
         end
 
+        def aliases
+            return @aliases ? Rake.quotepath('-A', @aliases) : ''
+        end
+
+        def namespaces
+            return @namespaces ? Rake.quotepath('-NS', @namespaces) : ''
+        end
+
         def exeoutput
             return @exeoutput || @bin
         end
@@ -174,7 +200,7 @@ module Rake
         def build_args
             args = []
             args << build? << warnings? << hints? << quiet? << debug? << alldebuginfo << map
-            args << defines << writeableconst
+            args << defines << writeableconst << aliases << namespaces
             args << _source << outputs << implicitpaths
             args.flatten
         end
@@ -183,7 +209,11 @@ module Rake
         def init(properties)
             Logger.trace(Logger::TRACE, properties)
             properties.map do |key, value|
-                instance_variable_set("@#{key}", value)
+                begin
+                    send("#{key}=", value)
+                rescue NoMethodError
+                    instance_variable_set("@#{key}", value)
+                end
             end
             @_source = properties[:projectfile].pathmap('%X.dpr')
             src = @_source.gsub('\\', '/')

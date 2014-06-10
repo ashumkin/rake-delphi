@@ -11,6 +11,7 @@ module Rake
         DelphiRegRoot =  'SOFTWARE\\Borland\\Delphi'
         BDSRegRoot = 'SOFTWARE\\Borland\\BDS'
         EDSRegRoot = 'SOFTWARE\\CodeGear\\BDS'
+        EmbarcaderoRegRoot = 'SOFTWARE\\Embarcadero\\BDS'
 
         # used mainly in tests
         def self.reinit
@@ -37,7 +38,8 @@ module Rake
 
         def versionInfoClass
             return @@version.to_f < 11 ? BDSVersionInfo : \
-                @@version.to_f < 13 ? RAD2007VersionInfo : RAD2010VersionInfo
+                @@version.to_f < 13 ? RAD2007VersionInfo : \
+                @@version.to_f < 14 ? RAD2010VersionInfo : XEVersionInfo
         end
 
         def self.readUserOption(key, name, ver)
@@ -79,8 +81,10 @@ module Rake
             else
                 if version.to_f < 12
                     regRoot = BDSRegRoot
-                else
+                elsif version.to_f < 14
                     regRoot = EDSRegRoot
+                else
+                    regRoot = EmbarcaderoRegRoot
                 end
             end
             version = version4version(version)
@@ -124,7 +128,7 @@ module Rake
             end
             if v.to_s.empty?
                 v = []
-                (4..14).each { |n| v << n.to_s }
+                (4..20).each { |n| v << n.to_s }
                 v.reverse!
             else
                 Logger.trace(Logger::DEBUG, 'DELPHI_VERSION is set: ' + v)

@@ -96,6 +96,25 @@ public
     end
 end
 
+class TestXEVersionInfo < TestBDSVersionInfo
+private
+    def version
+        'XE5'
+    end
+protected
+    def delphi_version
+        return '18'
+    end
+
+    def do_getinfo
+        @info = Rake::Delphi::XEVersionInfo.new(@rake_task)
+    end
+public
+    def test_info
+        super
+    end
+end
+
 class TestBDSVersionInfoAbsent < TestBDSVersionInfo
 protected
     def prepare_ver_info_file?
@@ -111,6 +130,13 @@ protected
 end
 
 class TestRAD2010VersionInfoAbsent < TestRAD2010VersionInfo
+protected
+    def prepare_ver_info_file?
+        return false
+    end
+end
+
+class TestXEVersionInfoAbsent < TestBDSVersionInfo
 protected
     def prepare_ver_info_file?
         return false

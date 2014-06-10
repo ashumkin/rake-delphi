@@ -44,7 +44,7 @@ module Rake
             end
             versioninfo.each do |v|
                 cv = v['content']
-                cv = (use_encode ? cv.encode(encoding, 'UTF-8') : iconv.iconv(cv)) if encoding
+                cv = (use_encode ? cv.encode(encoding, 'UTF-8') : iconv.iconv(cv)) if cv && encoding
                 @info[v['Name'].to_sym] = cv
             end
         end
@@ -88,6 +88,9 @@ module Rake
             # .dproj file has more nesting levels
             return content['ProjectExtensions']['BorlandProject'] if content
         end
+    end
+
+    class XEVersionInfo < RAD2010VersionInfo
     end
 
   end
