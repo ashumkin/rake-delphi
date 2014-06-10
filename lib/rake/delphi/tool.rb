@@ -133,24 +133,37 @@ module Rake
                 Logger.trace(Logger::DEBUG, 'DELPHI_VERSION is set: ' + v)
                 v = [v]
             end
+            tool_was_found = false
             v.each do |ver|
                 path = readDelphiDir(ver)
                 next unless path
                 tool = path + toolName
+                tool_was_found = true
+                Logger.trace(Logger::DEBUG, "Got tool: '#{tool}'")
                 if File.exists?(tool) # found it !
                     ENV['DELPHI_VERSION'] = ver
                     ENV['DELPHI_DIR'] = path
                     Logger.trace(Logger::DEBUG, "Set: DELPHI_VERSION=#{ver}; DELPHI_DIR='#{path}'")
-                    Logger.trace(Logger::DEBUG, "Tool: '#{tool}'")
                     return ver, path, tool
+                else
+                    Logger.trace(Logger::DEBUG, 'But file does not exist!')
                 end
             end
-            checkToolFailure(nil) if failIfNotFound
+            checkToolFailure(tool_was_found) if failIfNotFound
             return nil
         end
 
         def self.checkToolFailure(toolpath)
-            fail 'Could not find %s: (%s)' % [toolName, toolpath.to_s] unless File.exists?(toolpath.to_s)
+            if toolpath.kind_of?(TrueClass) || toolpath.kind_of?(FalseClass)
+                unless toolpath
+                    fail 'Could not detect path for %s! Check your registry and DELPHI_VERSION environment variable.' % [toolName]
+                end
+                cond = ! toolpath
+                toolpath = ''
+            else
+              cond = File.exists?(toolpath)
+            end
+            fail 'Could not find %s: (%s)' % [toolName, toolpath] unless cond
         end
 
     end
