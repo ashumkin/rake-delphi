@@ -33,6 +33,8 @@ module Rake
         def initialize(task)
             super(task)
             versioninfo = get_versioninfo_tag(@content)
+            # no need to continue if no version info file
+            return unless versioninfo
             versioninfo = versioninfo['Delphi.Personality']['VersionInfoKeys']['VersionInfoKeys']
             use_encode = String.new.respond_to?(:encode)
             encoding = self.class.encoding
@@ -57,7 +59,12 @@ module Rake
         end
 
         def do_getcontent
-            @content = XmlSimple.xml_in(@file, :ForceArray => false)
+            if File.exists?(@file)
+                @content = XmlSimple.xml_in(@file, :ForceArray => false)
+            else
+                warn "WARNING! Version info file #{@file} does not exists"
+                @content = nil
+            end
         end
 
         def _ext
@@ -72,14 +79,14 @@ module Rake
 
         def get_versioninfo_tag(content)
             # .dproj file has more nesting levels
-            return content['ProjectExtensions']['BorlandProject']['BorlandProject']
+            return content['ProjectExtensions']['BorlandProject']['BorlandProject'] if content
         end
     end
 
     class RAD2010VersionInfo < RAD2007VersionInfo
         def get_versioninfo_tag(content)
             # .dproj file has more nesting levels
-            return content['ProjectExtensions']['BorlandProject']
+            return content['ProjectExtensions']['BorlandProject'] if content
         end
     end
 

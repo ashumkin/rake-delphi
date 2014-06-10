@@ -44,6 +44,7 @@ public
     end
 
     def test_info
+        return unless prepare_ver_info_file?
         assert_equal '4.3.2.1', @info['FileVersion']
         assert_equal 'Rake', @info['CompanyName']
         assert_equal 'Test rake-delphi project %s description' % version, @info['FileDescription']
@@ -66,6 +67,7 @@ protected
     def do_getinfo
         @info = Rake::Delphi::RAD2007VersionInfo.new(@rake_task)
     end
+
     def delphi_version
         return '11'
     end
@@ -84,12 +86,34 @@ protected
     def do_getinfo
         @info = Rake::Delphi::RAD2010VersionInfo.new(@rake_task)
     end
+
     def delphi_version
         return '13'
     end
 public
     def test_info
         super
+    end
+end
+
+class TestBDSVersionInfoAbsent < TestBDSVersionInfo
+protected
+    def prepare_ver_info_file?
+        return false
+    end
+end
+
+class TestRAD2007VersionInfoAbsent < TestRAD2007VersionInfo
+protected
+    def prepare_ver_info_file?
+        return false
+    end
+end
+
+class TestRAD2010VersionInfoAbsent < TestRAD2010VersionInfo
+protected
+    def prepare_ver_info_file?
+        return false
     end
 end
 
