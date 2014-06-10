@@ -31,10 +31,6 @@ module Rake
             @@version
         end
 
-        def delphidir
-            @@delphidir
-        end
-
         def toolpath
             @@toolpath
         end

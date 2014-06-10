@@ -16,6 +16,14 @@ module Rake
             'bin/dcc32.exe'
         end
 
+        def delphidir
+            @@delphidir
+        end
+
+        def delphilib
+            ENV['BDSLIB']
+        end
+
         def readLibraryPaths
             libpaths = self.class.readUserOption('Library', 'Search Path', self.version).split(';') \
                 | self.class.readUserOption('Library', 'SearchPath', self.version).split(';')
@@ -75,7 +83,7 @@ module Rake
         end
 
         def delphilibs
-            return [@dcc32Tool.delphidir + 'Lib'] | @dcc32Tool.readLibraryPaths
+            return [@dcc32Tool.delphilib] | @dcc32Tool.readLibraryPaths
         end
 
         def _paths(ppaths)

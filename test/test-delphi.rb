@@ -150,7 +150,19 @@ public
     end
 end
 
-class TestRCResourceCompiler <  Test::Unit::TestCase
+# extend Rake::Delphi::RCResourceCompiler with .delphidir method
+# (just for tests)
+module Rake::Delphi
+
+class RCResourceCompiler
+    def delphidir
+        @@delphidir
+    end
+end
+
+end
+
+class TestRCResourceCompiler < Test::Unit::TestCase
 private
 public
     def setup

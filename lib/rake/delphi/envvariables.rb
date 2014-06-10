@@ -12,6 +12,7 @@ module Rake
             _dir = delphidir.gsub(/\/$/, '')
             add('DELPHI', _dir)
             add('BDS', _dir)
+            add('BDSLIB', _dir + '/Lib')
             expand_vars
             Logger.trace(Logger::TRACE, self)
         end
@@ -20,9 +21,17 @@ module Rake
             self[var] = value
         end
 
+        def expand_global(value)
+            value.gsub!(/\$\((?'env_name'\w+)\)/) do |match|
+                ENV[Regexp.last_match[:env_name]] || match
+            end
+            value
+        end
+
         def expand(value)
             self.each do |name, val|
                 value.gsub!("$(#{name})", val)
+                value = expand_global(value)
             end
             value
         end
