@@ -20,7 +20,7 @@ module Rake
                 | self.class.readUserOption('Library', 'SearchPath', self.version).split(';')
             dev = EnvVariables.new(self.class.rootForVersion(self.version) + '\Environment Variables', self.delphidir)
             libpaths.map! do |lp|
-                if !lp.nil? && !lp.empty?
+                unless lp.to_s.empty?
                     lp = dev.expand(lp)
                 end
                 lp
