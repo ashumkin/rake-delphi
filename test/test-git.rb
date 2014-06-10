@@ -15,8 +15,8 @@ private
         Rake::Delphi::ChDir.new(@rake_task, @test_git_dir) do
             `rm -rf .git *`
             `git init .`
-            `git config --global user.email "git@test.ru"`
-            `git config --global user.name "Git test"`
+            `git config user.email "git@test.ru"`
+            `git config user.name "Git test"`
             `echo file content > file.txt`
             `git add file.txt`
             `git commit -m "first commit"`
