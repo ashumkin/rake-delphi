@@ -52,7 +52,7 @@ private
     end
 
     def exe
-        exe = PROJECT_EXE % name.gsub(/[():]/, '_')
+        return PROJECT_EXE % name.gsub(/[():]/, '_')
     end
 public
     def setup

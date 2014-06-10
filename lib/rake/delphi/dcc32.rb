@@ -40,7 +40,7 @@ module Rake
             :dcpoutput, :dcu, :uselibrarypath, :uselibrarypath, :usecfg]
     public
         @@symbols.map do |sym|
-            attr_accessor sym
+            attr_accessor sym unless method_defined?(sym)
         end
 
         def initialize(name, application)

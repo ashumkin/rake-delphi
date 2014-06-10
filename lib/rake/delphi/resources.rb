@@ -39,7 +39,7 @@ module Rake
 
         def mainicon
             # take dcc33 task
-            icon = main_owner_task.mainicon
+            return main_owner_task.mainicon
         end
 
         def version
