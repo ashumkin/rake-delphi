@@ -76,5 +76,12 @@ module Rake
         end
     end
 
+    class RAD2010VersionInfo < RAD2007VersionInfo
+        def get_versioninfo_tag(content)
+            # .dproj file has more nesting levels
+            return content['ProjectExtensions']['BorlandProject']
+        end
+    end
+
   end
 end

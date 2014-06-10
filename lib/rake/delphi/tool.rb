@@ -36,7 +36,8 @@ module Rake
         end
 
         def versionInfoClass
-            return @@version.to_f < 11 ? BDSVersionInfo : RAD2007VersionInfo
+            return @@version.to_f < 11 ? BDSVersionInfo : \
+                @@version.to_f < 13 ? RAD2007VersionInfo : RAD2010VersionInfo
         end
 
         def self.readUserOption(key, name, ver)

@@ -75,4 +75,22 @@ public
     end
 end
 
+class TestRAD2010VersionInfo < TestBDSVersionInfo
+private
+    def version
+        '2010'
+    end
+protected
+    def do_getinfo
+        @info = Rake::Delphi::RAD2010VersionInfo.new(@rake_task)
+    end
+    def delphi_version
+        return '13'
+    end
+public
+    def test_info
+        super
+    end
+end
+
 end

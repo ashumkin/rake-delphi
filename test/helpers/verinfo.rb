@@ -6,7 +6,8 @@ require 'rake/delphi/envvariables'
 module DelphiTests
 
 class TestVerInfo < Test::Unit::TestCase
-    DPROJ_VERSIONS = { '10' => '2006.bdsproj', '11' => '2007.dproj' }
+    DPROJ_VERSIONS = { '10' => '2006.bdsproj', '11' => '2007.dproj', \
+                       '13' => '2010.dproj' }
 
 protected
     def delphi_version
