@@ -2,6 +2,7 @@
 
 require 'rake/common/exectask'
 require 'rake/delphi/projectinfo'
+require 'rake/delphi/envvariables'
 
 module Rake
   module Delphi
@@ -102,7 +103,7 @@ module Rake
         end
 
         def self.find(failIfNotFound = false)
-            v = ENV['DELPHI_VERSION']
+            v = EnvVariables.delphi_version
             if ENV['DELPHI_DIR']
                 # append trailing path delimiter
                 ENV['DELPHI_DIR'] = ENV['DELPHI_DIR'].gsub(/[^\/]$/, '\&/')

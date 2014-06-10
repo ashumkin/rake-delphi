@@ -12,6 +12,10 @@ module Rake
     end
 
     class EnvVariables < ::Array
+        def self.delphi_version
+            ENV['DELPHI_VERSION']
+        end
+
         def initialize(regpath, delphidir)
             _dir = delphidir.gsub(/\/$/, '')
             add('DELPHI', _dir)
