@@ -238,7 +238,6 @@ module Rake
                                 paths.each do |p|
                                     f.write(p + "\n")
                                 end
-                                f.close
                             end
                         end
                         sh cmd
