@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'rake'
-require 'fileutils'
 require 'test/unit'
 require 'rake/common/hashtask'
 require 'rake/helpers/unittest'
