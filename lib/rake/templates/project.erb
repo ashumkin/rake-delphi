@@ -21,7 +21,9 @@
 #define _FILEFLAGS (VER_PRERELEASE|VER_DEBUG)
 
 LANGUAGE <%= language %>, <%= sublanguage %>
+#ifdef MAIN_ICON
 MAINICON ICON <%= mainicon %>
+#endif
 1 VERSIONINFO
 FILEVERSION <%= version.comma %>
 PRODUCTVERSION <%= product.comma %>
