@@ -20,6 +20,10 @@ module Rake
         return ! path.to_s.empty? ? "#{switch}\"#{path.to_s}\"" : ''
     end
 
+    def self.unquotepath(path)
+        return path.to_s.gsub(/^"|"$/, '')
+    end
+
     def self.ruby18?
         /^1\.8/.match(RUBY_VERSION)
     end

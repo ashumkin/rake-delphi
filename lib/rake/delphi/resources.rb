@@ -95,10 +95,12 @@ module Rake
 
     class RCTask < Rake::Task
         attr_accessor :output, :input
+        attr_reader :is_main_icon
         def initialize(name, app)
             super
             @output = nil
             @is_rc = false
+            @is_main_icon = false
         end
 
         def input=(value)
@@ -110,10 +112,15 @@ module Rake
             @is_rc = ! value.to_s.empty?
         end
 
+        def is_main_icon=(value)
+            @is_main_icon = value
+        end
+
         def execute(args=nil)
             v, path, tool = RCResourceCompiler.find(true)
             a = []
             a << '/dRC' if @is_rc
+            a << '/dMAIN_ICON' if @is_main_icon
             a |= ['/fo', Rake.quotepath('', output), '/r', Rake.quotepath('', input) ]
             opts = { :args => a }
             opts.merge!(args)
