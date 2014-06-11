@@ -33,13 +33,18 @@ module Rake
             @rc_task = application.define_task(RCTask, shortname + ':rc')
             enhance([@rc_template_task, @rc_task])
             @platform = nil
-            @dccTool = Dcc32Tool.new
+            @dccToolClass = Dcc32Tool
+            recreate_dcc_tool
+        end
+
+        def recreate_dcc_tool(checkExistance = false)
+            @dccTool = @dccToolClass.new(checkExistance)
         end
 
         # used in tests
         def reenable
             # recreate Dcc32Tool to reinitialize paths to tool
-            @dccTool = Dcc32Tool.new(true)
+            recreate_dcc_tool(true)
             super
         end
 
