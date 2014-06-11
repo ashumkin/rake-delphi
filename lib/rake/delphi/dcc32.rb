@@ -19,7 +19,7 @@ module Rake
             :debuginfo, :localsymbols, :console, :warnings, :hints, :altercfg,
             :includepaths, :writeableconst,
             :map, :dcuoutput, :bploutput, :aliases, :platform, :namespaces,
-            :dcpoutput, :dcu, :uselibrarypath, :uselibrarypath, :usecfg]
+            :dcpoutput, :dcu, :uselibrarypath, :uselibrarypath, :usecfg, :dcc_options]
     public
         @@symbols.map do |sym|
             attr_accessor sym unless method_defined?(sym)
@@ -187,7 +187,7 @@ module Rake
 
         def build_args
             args = []
-            args << build? << console? << warnings? << hints? << quiet? << debug? << alldebuginfo << map
+            args << @dccTool.options << dcc_options << build? << console? << warnings? << hints? << quiet? << debug? << alldebuginfo << map
             args << defines << writeableconst << aliases << namespaces
             args << _source << outputs << implicitpaths
             args.flatten

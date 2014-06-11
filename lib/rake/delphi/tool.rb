@@ -36,6 +36,10 @@ module Rake
             @@toolpath
         end
 
+        def options
+            ''
+        end
+
         def versionInfoClass
             return @@version.to_f < 11 ? BDSVersionInfo : \
                 @@version.to_f < 13 ? RAD2007VersionInfo : \
