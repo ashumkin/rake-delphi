@@ -174,7 +174,7 @@ module Rake
         end
 
         def _source
-            return Rake.quotepath('', @_source)
+            return Rake.quotepath('', @_source.pathmap('%f'))
         end
 
         def defines
