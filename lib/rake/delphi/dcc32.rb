@@ -66,18 +66,18 @@ module Rake
             @rc_task = application.define_task(RCTask, shortname + ':rc')
             enhance([@rc_template_task, @rc_task])
             @platform = nil
-            @dcc32Tool = Dcc32Tool.new
+            @dccTool = Dcc32Tool.new
         end
 
         # used in tests
         def reenable
             # recreate Dcc32Tool to reinitialize paths to tool
-            @dcc32Tool = Dcc32Tool.new(true)
+            @dccTool = Dcc32Tool.new(true)
             super
         end
 
         def versionInfoClass
-            @dcc32Tool.versionInfoClass
+            @dccTool.versionInfoClass
         end
 
         def dcu=(value)
@@ -113,7 +113,7 @@ module Rake
         end
 
         def delphilibs
-            return [@dcc32Tool.delphilib] | @dcc32Tool.readLibraryPaths(@platform)
+            return [@dccTool.delphilib] | @dccTool.readLibraryPaths(@platform)
         end
 
         def _paths(ppaths)
@@ -275,7 +275,7 @@ module Rake
 
         def execute(opts=nil)
             super
-            @dcc32Tool.class.checkToolFailure(@dcc32Tool.toolpath)
+            @dccTool.class.checkToolFailure(@dccTool.toolpath)
             fail "Could not find #{_source} to compile" unless @_source && File.exists?(@_source)
             init_libs
             args = build_args
@@ -283,7 +283,7 @@ module Rake
             # so escape $
             args.map! { |a| a.gsub('$', '\$') if a.kind_of?(String) } unless application.windows?
             args.compact!
-            cmd = Rake.quotepath('', @dcc32Tool.toolpath)
+            cmd = Rake.quotepath('', @dccTool.toolpath)
             cmd << ([''] | args).join(' ')
             ChDir.new(self, File.dirname(@_source)) do |dir|
                 RakeFileUtils.verbose(Logger.debug?) do
