@@ -19,10 +19,10 @@ class File
 		path = `cygpath #{flag} "#{path}"`.chomp
 	end
 
-	def self.expand_path2(path)
+	def self.expand_path2(path, flag = nil)
 		path = expand_path(path)
 		return path unless cygwin?
-		return cygpath(path)
+		return cygpath(path, flag)
 	end
 
 	def self.dirname2(path, flag = nil)

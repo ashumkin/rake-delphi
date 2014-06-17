@@ -6,6 +6,7 @@ require 'rake/common/logger'
 require 'rake/delphi/rc'
 require 'rake/helpers/gemversion'
 require 'rake/helpers/rake'
+require 'rake/helpers/file'
 
 module Rake
   module Delphi
@@ -94,13 +95,12 @@ module Rake
     end
 
     class RCTask < Rake::Task
-        attr_accessor :output, :input
-        attr_reader :is_main_icon
+        attr_accessor :output, :input, :mainicon_path
         def initialize(name, app)
             super
             @output = nil
             @is_rc = false
-            @is_main_icon = false
+            @main_icon_path = nil
         end
 
         def input=(value)
@@ -112,15 +112,20 @@ module Rake
             @is_rc = ! value.to_s.empty?
         end
 
-        def is_main_icon=(value)
-            @is_main_icon = value
+        def is_main_icon
+            mainicon_path_unquoted = File.expand_path2(Rake.unquotepath(@mainicon_path), '-ml')
+            is_main_icon = File.exists?(mainicon_path_unquoted)
+            unless is_main_icon
+                warn "WARNING! Icon file '#{mainicon_path_unquoted}' does not exists. Application icon is disabled."
+            end
+            return is_main_icon
         end
 
         def execute(args=nil)
             v, path, tool = RCResourceCompiler.find(true)
             a = []
             a << '/dRC' if @is_rc
-            a << '/dMAIN_ICON' if @is_main_icon
+            a << '/dMAIN_ICON' if is_main_icon
             a |= ['/fo', Rake.quotepath('', output), '/r', Rake.quotepath('', input) ]
             opts = { :args => a }
             opts.merge!(args)

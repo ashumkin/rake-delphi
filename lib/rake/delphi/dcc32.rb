@@ -229,11 +229,7 @@ module Rake
             @rc_template_task[:releaseCandidate] = properties[:releaseCandidate]
             @rc_task.input = src
             @rc_task.is_rc = properties[:releaseCandidate]
-            mainicon_path = File.expand_path2(Rake.unquotepath(@mainicon))
-            @rc_task.is_main_icon = File.exists?(mainicon_path)
-            unless @rc_task.is_main_icon
-                warn "WARNING! Icon file '#{mainicon_path}' does not exists. Application icon is disabled."
-            end
+            @rc_task.mainicon_path = @mainicon
             return unless properties[:resources_additional]
             res_add = properties[:resources_additional]
             if res_add.kind_of?(String)
