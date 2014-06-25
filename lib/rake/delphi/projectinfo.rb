@@ -35,7 +35,12 @@ module Rake
             versioninfo = get_versioninfo_tag(@content)
             # no need to continue if no version info file
             return unless versioninfo
-            versioninfo = versioninfo['Delphi.Personality']['VersionInfoKeys']['VersionInfoKeys']
+            ['Delphi.Personality', 'VersionInfoKeys', 'VersionInfoKeys'].each do |key|
+              versioninfo = versioninfo[key]
+              # test version info file validity
+              # no need to continue if file not valid
+              return unless versioninfo
+            end
             use_encode = String.new.respond_to?(:encode)
             encoding = self.class.encoding
             if encoding && ! use_encode
