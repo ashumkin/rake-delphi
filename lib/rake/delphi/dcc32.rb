@@ -176,6 +176,10 @@ module Rake
             return @dcuoutput || @dcu || @_source.pathmap('%d%sdcu')
         end
 
+        def console?
+          return @console.nil? ? '' : (@console ? '-CC' : '-CG')
+        end
+
         def map
             # segments -> -GS
             # publics   -> -GP
@@ -211,7 +215,7 @@ module Rake
 
         def build_args
             args = []
-            args << build? << warnings? << hints? << quiet? << debug? << alldebuginfo << map
+            args << build? << console? << warnings? << hints? << quiet? << debug? << alldebuginfo << map
             args << defines << writeableconst << aliases << namespaces
             args << _source << outputs << implicitpaths
             args.flatten
