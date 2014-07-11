@@ -92,6 +92,18 @@ module Rake
           enhance([dcu_task])
         end
 
+        def platform=(value)
+            @platform = value
+            Logger.trace(Logger::DEBUG, 'PLATFORM set: ' + value)
+            ENV['PLATFORM'] = @platform
+            # for XE and above set default aliases and namespaces
+            if ENV['DELPHI_VERSION'].to_i >= 14
+                @aliases = 'Generics.Collections=System.Generics.Collections;Generics.Defaults=System.Generics.Defaults;WinTypes=Winapi.Windows;WinProcs=Winapi.Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE'
+                @namespaces = 'Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;System;Xml;Data;Datasnap;Web;Soap'
+                Logger.trace(Logger::TRACE, 'Aliases and namespaces are set for Delphi XE')
+            end
+        end
+
     private
         def initvars
             @exeoutput = nil
@@ -102,18 +114,6 @@ module Rake
 
         def delphilibs
             return [@dcc32Tool.delphilib] | @dcc32Tool.readLibraryPaths(@platform)
-        end
-
-        def platform=(value)
-            @platform = value
-            Logger.trace(Logger::DEBUG, 'PLATFORM set: ' + value)
-            ENV['PLATFORM'] = @platform
-            # for XE and above set default aliases and namespaces
-            if ENV['DELPHI_VERSION'].to_i >= 14
-                @aliases = 'Generics.Collections=System.Generics.Collections;Generics.Defaults=System.Generics.Defaults;WinTypes=Winapi.Windows;WinProcs=Winapi.Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE'
-                @namespaces = 'Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;System;Xml;Data;Datasnap;Web;Soap;Vcl'
-                Logger.trace(Logger::TRACE, 'Aliases and namespaces are set for Delphi XE')
-            end
         end
 
         def _paths(ppaths)
