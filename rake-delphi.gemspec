@@ -14,7 +14,16 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
 
   spec.files         = Dir['*', 'lib/**/*.*rb',
-    'test/*', 'test/helpers/*', 'test/resources/**/*', 'test/resources/**/.gitkeep']
+    'test/*.rb', 'test/helpers/*.rb', 'test/resources/**/*', 'test/resources/**/.gitkeep']
+  # avoid adding redundant files
+  spec.files.delete_if do |f|
+    match = false
+    [/\/test\/tmp\//, /\/dcu\//].each do |re|
+      match = re.match(f)
+      break if match
+    end
+    match
+  end
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
