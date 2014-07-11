@@ -27,6 +27,7 @@ module Rake
         end
 
         def execute(args = nil)
+            super
             mask = @original_dir + '/lib/**/**'
             @libs = LibList.new(mask)
         end

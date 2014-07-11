@@ -86,6 +86,7 @@ module Rake
         end
 
         def execute(args=nil)
+            super
             erb = ERB.new(IO.read(@template_file))
             text = erb.result(@template_obj.get_binding)
             File.open(@output, 'w') do |f|
@@ -122,6 +123,7 @@ module Rake
         end
 
         def execute(args=nil)
+            super
             v, path, tool = RCResourceCompiler.find(true)
             a = []
             a << '/dRC' if @is_rc

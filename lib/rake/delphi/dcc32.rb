@@ -260,6 +260,7 @@ module Rake
         end
 
         def execute(opts=nil)
+            super
             @dcc32Tool.class.checkToolFailure(@dcc32Tool.toolpath)
             fail "Could not find #{_source} to compile" unless @_source && File.exists?(@_source)
             init_libs
