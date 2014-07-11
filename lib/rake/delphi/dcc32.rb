@@ -80,6 +80,18 @@ module Rake
             @dcc32Tool.versionInfoClass
         end
 
+        def dcu=(value)
+          # delete previously defined
+          @prerequisites.delete_if do |d|
+            if d.kind_of?(Rake::FileCreationTask)
+               d.name.casecmp(@dcu) == 0
+            end
+          end
+          @dcu = value
+          dcu_task = directory @dcu
+          enhance([dcu_task])
+        end
+
     private
         def initvars
             @exeoutput = nil
@@ -217,11 +229,9 @@ module Rake
             end
             @_source = properties[:projectfile].pathmap('%X.dpr')
             src = @_source.gsub('\\', '/')
-            dcu = src.pathmap('%d%sdcu')
             # make sure to create dir for output dcu
             # for now default is <PROJECTDIR>/dcu
-            directory dcu
-            enhance([dcu])
+            self.dcu = src.pathmap('%d%sdcu') unless @dcu
             # mainicon is usually requested by RCTemplate
             @mainicon ||= Rake.quotepath('', src.pathmap('%X.ico'))
             @rc_template_task.output = src

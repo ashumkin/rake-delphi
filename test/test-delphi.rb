@@ -31,7 +31,10 @@ private
         end
 
         bin_dir = File.dirname(exe)
+        dcu_dir_rel = '../../tmp/dcu'
+        dcu_dir = bin_dir + '/../' + dcu_dir_rel
         FileUtils.mkdir_p(bin_dir)
+        FileUtils.mkdir_p(dcu_dir)
         # reenable task for subsequent calls
         prepare_task = ::Rake::Task['test:prepare']
         prepare_task.reenable
@@ -39,6 +42,7 @@ private
         useresources = prepare_args[:useresources]
         prepare_args.delete(:useresources)
         prepare_args[:bin] = bin_dir
+        prepare_args[:dcu] = dcu_dir_rel.gsub('/', '\\')
 
         prepare_task.invoke(useresources, prepare_args)
 
