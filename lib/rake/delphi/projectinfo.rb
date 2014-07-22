@@ -68,7 +68,7 @@ module Rake
                 @content = XmlSimple.xml_in(@file, :ForceArray => false)
             else
                 warn "WARNING! Version info file #{@file} does not exists"
-                @content = nil
+                super
             end
         end
 
