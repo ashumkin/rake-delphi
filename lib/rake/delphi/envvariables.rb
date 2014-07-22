@@ -19,11 +19,8 @@ module Rake
         end
 
         def expand(value)
-            self.each do |name, val|
-                value.gsub!("$(#{name})", val)
-                value = expand_global(value)
-            end
-            value
+            value = expand_value(value, self)
+            value = expand_value(value, ENV)
         end
 
     private
@@ -52,12 +49,11 @@ module Rake
             self[var] = value
         end
 
-        def expand_global(value)
-            value.gsub!(/\$\((?'env_name'\w+)\)/) do |match|
+        def expand_value(value, values)
+            value.gsub(/\$\((?'env_name'\w+)\)/) do |match|
                 name = Regexp.last_match[:env_name].upcase
-                ENV[name] || match
+                values[name] || match
             end
-            value
         end
 
         def expand_vars

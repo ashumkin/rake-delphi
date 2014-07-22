@@ -18,6 +18,13 @@ class TestEnvVariables < Test::Unit::TestCase
         assert_equal('c:/delphi directory/Lib', env_vars['BDSLIB'])
         assert_equal('Platform: BDS platform', env_vars.expand('Platform: $(BDS_PLATFORM)'))
         assert_equal('Platform: BDS platform case', env_vars.expand('Platform: $(bds_platform_case)'))
+
         assert_equal('Env: $(BDS_NON_EXISTANT)', env_vars.expand('Env: $(BDS_NON_EXISTANT)'))
+
+        env_vars['BDS_PLATFORM_CASE_2'] = 'BDS Platform Case 2'
+        # be sure there is no BDS_Platform_Case_2 defined
+        assert_not_equal('BDS Platform Case 2', env_vars['BDS_Platform_Case_2'])
+        # also freeze string (ENV vars are frozen strings)
+        assert_equal('Platform: BDS Platform Case 2', env_vars.expand('Platform: $(BDS_Platform_Case_2)'.freeze))
     end
 end
