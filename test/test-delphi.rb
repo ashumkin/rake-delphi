@@ -7,6 +7,7 @@ require 'rake/delphi'
 require 'rake/delphi/project'
 require 'rake/delphi/tool'
 require 'rake/helpers/unittest'
+require 'rake/helpers/raketask'
 require 'helpers/consts'
 require 'helpers/verinfo'
 
@@ -14,15 +15,6 @@ module DelphiTests
 
 class TestDelphi < TestVerInfo
 private
-    def reenable_tasks(task)
-        return unless task.class <= Rake::Task
-        task.reenable
-        task.prerequisites.each do |ptask|
-            ptask.reenable if ptask.class < Rake::Task
-            reenable_tasks(ptask)
-        end
-    end
-
     def _test_compile_and_output(prepare_args, output)
         args = [:altercfg, :usecfg, :defines, :debuginfo, :debug, :includepaths]
         # reinitialize arguments (even absent ones)
@@ -48,7 +40,7 @@ private
 
         # reenable tasks (!!! after invoking 'test:prepare')
         task = ::Rake::Task['test:compile']
-        reenable_tasks(task)
+        task.reenable_chain
         task.invoke
 
         assert(File.exists?(exe), 'File %s does not exist' % exe)

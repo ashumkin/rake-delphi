@@ -34,5 +34,12 @@ module Rake
             n.gsub!(scope + ':', '') unless scope.empty?
             return n
         end
+
+        def reenable_chain
+            reenable
+            prerequisites.each do |ptask|
+                ptask.reenable_chain if ptask.class < Rake::Task
+            end
+        end
     end
 end
