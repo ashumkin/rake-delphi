@@ -17,7 +17,7 @@ module Rake
             super
             initvars
             @dcc = application.define_task(Dcc32Task, shortname + ':dcc32')
-            @libs = LibsTask.define('all-delphi-libs', application)
+            @libs = LibsTask.define(name + ':all-delphi-libs', application)
             @level = 1
             enhance([@libs, @dcc])
         end
