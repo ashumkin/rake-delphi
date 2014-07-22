@@ -8,6 +8,25 @@ module Rake
             ENV['DELPHI_VERSION']
         end
 
+        def initialize(regpath, delphidir)
+            readreg(regpath)
+            _dir = delphidir.gsub(/\/$/, '')
+            add('DELPHI', _dir)
+            add('BDS', _dir)
+            add('BDSLIB', _dir + '/Lib')
+            expand_vars
+            Logger.trace(Logger::TRACE, self)
+        end
+
+        def expand(value)
+            self.each do |name, val|
+                value.gsub!("$(#{name})", val)
+                value = expand_global(value)
+            end
+            value
+        end
+
+    private
         def readreg(regpath)
             return unless regpath
             begin
@@ -29,16 +48,6 @@ module Rake
             end
         end
 
-        def initialize(regpath, delphidir)
-            readreg(regpath)
-            _dir = delphidir.gsub(/\/$/, '')
-            add('DELPHI', _dir)
-            add('BDS', _dir)
-            add('BDSLIB', _dir + '/Lib')
-            expand_vars
-            Logger.trace(Logger::TRACE, self)
-        end
-
         def add(var, value)
             self[var] = value
         end
@@ -47,14 +56,6 @@ module Rake
             value.gsub!(/\$\((?'env_name'\w+)\)/) do |match|
                 name = Regexp.last_match[:env_name].upcase
                 ENV[name] || match
-            end
-            value
-        end
-
-        def expand(value)
-            self.each do |name, val|
-                value.gsub!("$(#{name})", val)
-                value = expand_global(value)
             end
             value
         end
