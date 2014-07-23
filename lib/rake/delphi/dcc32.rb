@@ -159,15 +159,15 @@ module Rake
             return @quiet ? '-Q' : ''
         end
 
-        def aliases
+        def _aliases
             return @aliases ? Rake.quotepath('-A', @aliases) : ''
         end
 
-        def namespaces
+        def _namespaces
             return @namespaces ? Rake.quotepath('-NS', @namespaces) : ''
         end
 
-        def dcuoutput
+        def _dcuoutput
             return @dcuoutput || @dcu || @_source.pathmap('%d%sdcu')
         end
 
@@ -175,7 +175,7 @@ module Rake
           return @console.nil? ? '' : (@console ? '-CC' : '-CG')
         end
 
-        def map
+        def _map
             # segments -> -GS
             # publics   -> -GP
             # detailed  -> -GD
@@ -184,14 +184,14 @@ module Rake
             return '-G' + segments
         end
 
-        def alldebuginfo
+        def _alldebuginfo
             return @debuginfo ? '-$D+ -$L+ -$YD' : '-$D- -$L- -$Y-'
         end
 
         def outputs
             os = []
             os << Rake.quotepath('-E', exeoutput)
-            os << Rake.quotepath('-N', dcuoutput)
+            os << Rake.quotepath('-N', _dcuoutput)
             os << Rake.quotepath('-LE', @bploutput)
             return os
         end
@@ -200,18 +200,18 @@ module Rake
             return Rake.quotepath('', @_source.pathmap('%f'))
         end
 
-        def defines
+        def _defines
             '-D' + @defines if @defines
         end
 
-        def writeableconst
+        def _writeableconst
             return '-$J' + (@writeableconst ? '+' : '-')
         end
 
         def build_args
             args = []
-            args << @dccTool.options << dcc_options << build? << console? << warnings? << hints? << quiet? << debug? << alldebuginfo << map
-            args << defines << writeableconst << aliases << namespaces
+            args << @dccTool.options << dcc_options << build? << console? << warnings? << hints? << quiet? << debug? << _alldebuginfo << _map
+            args << _defines << _writeableconst << _aliases << _namespaces
             args << _source << outputs << implicitpaths
             args.flatten
         end

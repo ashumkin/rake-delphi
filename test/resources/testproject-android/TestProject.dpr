@@ -3,7 +3,7 @@ program TestProject;
 uses
   System.StartUpCopy,
   FMX.MobilePreview,
-  FMX.Forms,
+  Forms,
   fmTest in 'fmTest.pas' {TestForm};
 
 {$R *.res}

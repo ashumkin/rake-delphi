@@ -45,6 +45,7 @@ module TestAndroidModule
 
       dpr_vars[:bin] = File.expand_path2(dpr_vars[:bin_path])
       dpr.init(Module.nesting, File.expand_path(__FILE__), dpr_vars, 0)
+      dpr.application[dpr.name + ':dcc32'].namespaces << ';FMX'
 
       directory dpr_vars[:bin_path]
       _task.enhance [dpr_vars[:bin_path], dpr]
