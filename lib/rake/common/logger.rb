@@ -3,7 +3,7 @@
 module Rake
   module Delphi
     class Logger
-      NORMAL = 0
+      NORMAL = INFO = 0
       VERBOSE = 1
       DEBUG = 2
       TRACE = 3

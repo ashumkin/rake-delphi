@@ -9,17 +9,6 @@ require 'rake/helpers/unittest'
 require 'helpers/consts'
 require 'helpers/verinfo'
 
-module Rake
-    module Delphi
-        class BDSVersionInfo
-            # override method
-            def self.encoding
-                'Windows-1251'
-            end
-        end
-    end
-end
-
 module DelphiTests
 
 class TestBDSVersionInfo < TestVerInfo

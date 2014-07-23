@@ -11,7 +11,16 @@ module Rake
 
         def initialize(name, app)
             @logger = Logger.new(STDOUT)
+            @enabled = true
             initialize_base(name, app)
+        end
+
+        def needed?
+            @enabled
+        end
+
+        def needed=(value)
+            @enabled = value
         end
 
         # replace execute to indicate what method is executed

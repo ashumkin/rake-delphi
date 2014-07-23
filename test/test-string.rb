@@ -15,4 +15,27 @@ class TestString < Test::Unit::TestCase
         assert 'android'.starts_with?('android')
         assert ! 'win'.starts_with?('android')
     end
+
+    def test_double_delimilters
+        s = 'a\\b\\c'
+        assert_equal 'a\\\\b\\\\c', 'a\\b\\c'.double_delimiters
+        # test s was not changed
+        assert_equal 'a\\b\\c', s
+        assert_equal 'a/b/c', 'a/b/c'.double_delimiters
+        assert_equal 'a/b\\\\c', 'a/b\\c'.double_delimiters
+    end
+
+    def test_double_delimilters!
+        s = 'a\\b\\c'
+        s.double_delimiters!
+        assert_equal 'a\\\\b\\\\c', s
+
+        s = 'a/b/c'
+        s.double_delimiters!
+        assert_equal 'a/b/c', s
+
+        s = 'a/b\\c'
+        s.double_delimiters!
+        assert_equal 'a/b\\\\c', s
+    end
 end

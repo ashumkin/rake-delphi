@@ -28,6 +28,17 @@ public
         assert_equal '1,2,3,4', Gem::VersionImproved.new('1.2.3.4').comma
     end
 
+    def test_release_num
+        @version = Gem::VersionImproved.new('1.2.3.4')
+        assert_equal 3, @version.release_num
+
+        @version = Gem::VersionImproved.new('1.2.3')
+        assert_equal 2, @version.release_num
+
+        @version = Gem::VersionImproved.new('1.2')
+        assert_equal 1, @version.release_num
+    end
+
     def test_prev_release
         @version = Gem::VersionImproved.new('1.2.3.4')
         assert_equal '1.2.2', @version.prev_release.version

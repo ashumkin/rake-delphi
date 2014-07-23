@@ -96,6 +96,78 @@ module Rake
     end
 
     class XEVersionInfo < RAD2010VersionInfo
+    private
+      def read_file_class(platform, node, hash, key)
+        platforms = node['Platform']
+        unless platforms.kind_of?(Array)
+          platforms = [platforms]
+        end
+        platforms.each do |plat|
+          if plat['Name'].casecmp(platform) == 0
+            # take filename from hash by key
+            value = node.delete(key)
+            # delete Name (it is a filtered platform)
+            plat.delete('Name')
+            # update Platform
+            node['Platform'] = plat
+            node.delete('Platform') if plat.empty?
+            hash.merge!({ value => node })
+          end
+        end
+      end
+
+      def read_files_and_classes(deployment_content, platform)
+        files = {}
+        classes = {}
+        deployment_content.each do |k, v|
+          if k == 'DeployFile'
+            v.each do |file|
+              read_file_class(platform, file, files, 'LocalName')
+            end
+          elsif k == 'DeployClass'
+            v.each do |_class|
+              read_file_class(platform, _class, classes, 'Name')
+            end
+          end
+        end
+        return files, classes
+      end
+
+      def make_deployment(files, classes)
+        r = []
+        files.each do |file, value|
+          value_class = value['Class']
+          _class = classes[value_class]
+          next if ['AndroidGDBServer', 'ProjectAndroidManifest'].include?(value_class)
+          if value_class == 'AndroidClassesDexFile'
+            # dirty hack for 'classes.dex'
+            # usually .dproj has full path to it
+            # but we may have another path
+            # so remove 'first' part
+            file = file.gsub(/^.+(\\lib\\android\\)/, '$(BDS)\1')
+          end
+          remote_name = value['Platform'] ? value['Platform']['RemoteName'] : file.pathmap('%f')
+          if value_class == 'ProjectOutput'
+            file = :project_so
+          end
+          r << { file => [_class['Platform']['RemoteDir'] + '\\', '1', remote_name] }
+        end
+        return r
+      end
+
+    public
+      def deploymentfiles(platform)
+        deployment = @content
+        raise 'There is no deployment info! Cannot continue.' unless deployment
+        ['ProjectExtensions', 'BorlandProject', 'Deployment'].each do |section|
+          deployment = deployment[section]
+          break unless deployment
+        end
+        warn "#{@file} have no deployment info" unless deployment
+        files, classes = read_files_and_classes(deployment, platform)
+        r = make_deployment(files, classes)
+        return r
+      end
     end
 
   end

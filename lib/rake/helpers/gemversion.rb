@@ -35,6 +35,17 @@ module Gem
             self.class.new segments.join('.')
         end
 
+        ##
+        # Returns release only part
+        # (e.g. 1.2.3.4 -> 3, 1.2.3 -> 2)
+        def release_num
+            segments = self.segments.dup
+            segments.pop while segments.any? { |s| String === s }
+            segments.pop if segments.size > 1
+
+            segments[-1]
+        end
+
         def comma
             segments.dup.join(',')
         end

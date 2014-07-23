@@ -6,6 +6,8 @@ require 'rake/delphi/tool'
 module Rake
   module Delphi
     class Dcc32Tool < CustomDelphiTool
+        attr_reader :env
+
         def self.toolName
             'bin/dcc32.exe'
         end
@@ -18,7 +20,11 @@ module Rake
             ENV['BDSLIB']
         end
 
-        def readLibraryPaths(platform)
+        def init_env
+            @env ||= EnvVariables.new(self.class.rootForVersion(self.version) + '\Environment Variables', self.delphidir)
+        end
+
+        def readLibraryPaths(platform, platform_stripped)
             Logger.trace(Logger::TRACE, 'Reading library paths for platform: ' + platform.to_s)
             warn "WARNING! You are using Delphi XE or above but no platform defined!" if ENV['DELPHI_VERSION'].to_i >= 14 && ! platform
 
@@ -28,7 +34,8 @@ module Rake
                 | self.class.readUserOption('Library', 'SearchPath', self.version).split(';')
             Logger.trace(Logger::TRACE, 'Library paths read:')
             Logger.trace(Logger::TRACE, libpaths)
-            dev = EnvVariables.new(self.class.rootForVersion(self.version) + '\Environment Variables', self.delphidir)
+            dev = init_env
+            dev['PLATFORM'] = platform_stripped if platform_stripped
             libpaths.map! do |lp|
                 unless lp.to_s.empty?
                     lp = dev.expand(lp)

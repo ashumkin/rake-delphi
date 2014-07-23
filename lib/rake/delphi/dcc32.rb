@@ -6,6 +6,8 @@ require 'rake/common/logger'
 require 'rake/delphi/envvariables'
 require 'rake/delphi/resources'
 require 'rake/delphi/dcc32tool'
+require 'rake/delphi/dccaarmtool'
+require 'rake/helpers/string'
 require 'rake/helpers/rake'
 require 'rake/helpers/raketask'
 
@@ -13,6 +15,7 @@ module Rake
   module Delphi
     class Dcc32Task < Rake::Task
         attr_accessor :systempath, :mainicon, :_source, :exeoutput, :bin
+        attr_reader :dccTool
 
     private
         @@symbols = [:quiet, :assertions, :build, :optimization, :debug, :defines,
@@ -33,11 +36,14 @@ module Rake
             @rc_task = application.define_task(RCTask, shortname + ':rc')
             enhance([@rc_template_task, @rc_task])
             @platform = nil
-            @dccToolClass = Dcc32Tool
+            @platform_stripped = nil
+            @dccToolClass = nil
             recreate_dcc_tool
         end
 
         def recreate_dcc_tool(checkExistance = false)
+            @dccToolClass ||= Dcc32Tool
+            @dccToolClass.reinit
             @dccTool = @dccToolClass.new(checkExistance)
         end
 
@@ -50,6 +56,10 @@ module Rake
 
         def versionInfoClass
             @dccTool.versionInfoClass
+        end
+
+        def createVersionInfo
+            versionInfoClass.new(self)
         end
 
         def dcu=(value)
@@ -67,13 +77,30 @@ module Rake
         def platform=(value)
             @platform = value
             Logger.trace(Logger::DEBUG, 'PLATFORM set: ' + value)
-            ENV['PLATFORM'] = @platform
+            # strip digits from platform name Android
+            @platform_stripped = @platform
+            @platform_stripped = @platform.gsub(/\d/, '') if @platform.downcase.starts_with?('android')
+            @dccToolClass = nil
+            post_needed = false
+            if @platform_stripped.downcase.to_sym == :android
+                # set dccaarm compiler tool for Android platform
+                @dccToolClass = DccARMTool
+                post_needed = true
+            end
+            recreate_dcc_tool
+            Logger.trace(Logger::DEBUG, 'DCC tool set: ' + @dccToolClass.to_s)
+            # enable appropriate PAClientTask
+            application[name + ':post'].needed = post_needed
             # for XE and above set default aliases and namespaces
             if ENV['DELPHI_VERSION'].to_i >= 14
                 @aliases = 'Generics.Collections=System.Generics.Collections;Generics.Defaults=System.Generics.Defaults;WinTypes=Winapi.Windows;WinProcs=Winapi.Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE'
                 @namespaces = 'Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;System;Xml;Data;Datasnap;Web;Soap'
                 Logger.trace(Logger::TRACE, 'Aliases and namespaces are set for Delphi XE')
             end
+        end
+
+        def exeoutput
+            return @exeoutput || @bin
         end
 
     private
@@ -85,7 +112,7 @@ module Rake
         end
 
         def delphilibs
-            return [@dccTool.delphilib] | @dccTool.readLibraryPaths(@platform)
+            return [@dccTool.delphilib] | @dccTool.readLibraryPaths(@platform, @platform_stripped)
         end
 
         def _paths(ppaths)
@@ -140,10 +167,6 @@ module Rake
             return @namespaces ? Rake.quotepath('-NS', @namespaces) : ''
         end
 
-        def exeoutput
-            return @exeoutput || @bin
-        end
-
         def dcuoutput
             return @dcuoutput || @dcu || @_source.pathmap('%d%sdcu')
         end
@@ -194,6 +217,10 @@ module Rake
         end
 
     public
+        def dpr
+          @_source
+        end
+
         def init(properties)
             Logger.trace(Logger::TRACE, properties)
             properties.map do |key, value|

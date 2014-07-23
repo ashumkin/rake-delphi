@@ -49,7 +49,7 @@ module Rake
         end
 
         def versioninfo
-            @versioninfo ||= main_owner_task.versionInfoClass.new(main_owner_task)
+            @versioninfo ||= main_owner_task.createVersionInfo
         end
 
         def product

@@ -4,6 +4,7 @@ require 'rake'
 require 'rake/common/classes'
 require 'rake/common/libstask'
 require 'rake/delphi/dcc32'
+require 'rake/delphi/paclient'
 require 'rake/helpers/file'
 require 'rake/helpers/raketask'
 require 'rake/helpers/string'
@@ -18,8 +19,9 @@ module Rake
             initvars
             @dcc = application.define_task(Dcc32Task, shortname + ':dcc32')
             @libs = LibsTask.define(name + ':all-delphi-libs', application)
+            @post = application.define_task(PAClientTask, @dcc.shortname + ':post')
             @level = 1
-            enhance([@libs, @dcc])
+            enhance([@libs, @dcc, @post])
         end
 
         def initvars

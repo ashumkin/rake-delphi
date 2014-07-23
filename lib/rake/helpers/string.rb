@@ -12,4 +12,12 @@ class String
         prefix = prefix.to_s
         self[0, prefix.length] == prefix
     end
+
+    def double_delimiters
+        gsub('\\', '\\\\\\')
+    end
+
+    def double_delimiters!
+        replace(self.double_delimiters)
+    end
 end

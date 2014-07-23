@@ -30,7 +30,7 @@ namespace :test do
     desc 'Preparation'
     task :prepare, :useresources, :options do |t, opts|
         _task = Rake::Task['test:compile']
-        dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.shortname + ':delphi').to_sym)
+        dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.name + ':delphi').to_sym)
         dpr[:resources_additional] = 'resources' if opts[:useresources]
         if ENV['DELPHI_VERSION'].to_i >= 14
             dpr[:platform] = 'Win32'

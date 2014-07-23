@@ -13,7 +13,6 @@ module Rake
         EDSRegRoot = 'SOFTWARE\\CodeGear\\BDS'
         EmbarcaderoRegRoot = 'SOFTWARE\\Embarcadero\\BDS'
 
-        # used mainly in tests
         def self.reinit
             @@version, @@delphidir, @@toolpath = nil, nil, nil
         end
@@ -34,6 +33,10 @@ module Rake
 
         def toolpath
             @@toolpath
+        end
+
+        def delphidir
+          @@delphidir
         end
 
         def options
