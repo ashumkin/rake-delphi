@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   # avoid adding redundant files
   spec.files.delete_if do |f|
     match = false
-    [/\/test\/tmp\//, /\/dcu\//].each do |re|
+    [/\/test\/tmp\//, /\/dcu\//, /\.drc$/].each do |re|
       match = re.match(f)
       break if match
     end
