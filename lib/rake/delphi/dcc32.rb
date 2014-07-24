@@ -45,6 +45,7 @@ module Rake
             @dccToolClass ||= Dcc32Tool
             @dccToolClass.reinit
             @dccTool = @dccToolClass.new(checkExistance)
+            Logger.trace(Logger::DEBUG, name + ': DCC tool set: ' + @dccToolClass.to_s)
         end
 
         # used in tests
@@ -87,8 +88,6 @@ module Rake
                 @dccToolClass = DccARMTool
                 post_needed = true
             end
-            recreate_dcc_tool
-            Logger.trace(Logger::DEBUG, 'DCC tool set: ' + @dccToolClass.to_s)
             # enable appropriate PAClientTask
             application[name + ':post'].needed = post_needed
             # for XE and above set default aliases and namespaces
@@ -274,6 +273,7 @@ module Rake
 
         def execute(opts=nil)
             super
+            recreate_dcc_tool
             @dccTool.class.checkToolFailure(@dccTool.toolpath)
             fail "Could not find #{_source} to compile" unless @_source && File.exists?(@_source)
             init_libs
