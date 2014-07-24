@@ -23,8 +23,8 @@ private
         end
 
         bin_dir = File.dirname(exe)
-        dcu_dir_rel = '../../../../tmp/win32/dcu'
-        dcu_dir = bin_dir + '/../' + dcu_dir_rel
+        dcu_dir_rel = '../../tmp/win32/dcu'
+        dcu_dir = bin_dir + '/../../' + dcu_dir_rel
         FileUtils.mkdir_p(bin_dir)
         FileUtils.mkdir_p(dcu_dir)
         # reenable task for subsequent calls
