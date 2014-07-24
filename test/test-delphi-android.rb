@@ -68,8 +68,8 @@ module DelphiAndroidTests
       end
 
       bin_dir = File.dirname(apk)
-      dcu_dir_rel = '../../../tmp/android/dcu'
-      dcu_dir = bin_dir + '/../' + dcu_dir_rel
+      dcu_dir_rel = '../../tmp/android/dcu'
+      dcu_dir = bin_dir + '/../../' + dcu_dir_rel
       FileUtils.mkdir_p(bin_dir)
       FileUtils.mkdir_p(dcu_dir)
       # reenable task for subsequent calls
@@ -80,6 +80,7 @@ module DelphiAndroidTests
       prepare_args.delete(:useresources)
       prepare_args[:bin] = bin_dir
       prepare_args[:version] = '1.3.2.4'
+      prepare_args[:dcu] = dcu_dir_rel.gsub('/', '\\')
 
       prepare_task.invoke(useresources, prepare_args)
 
