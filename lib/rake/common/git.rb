@@ -33,7 +33,7 @@ module Rake
 
         def initialize(task, opts)
             super(task)
-            @opts = {:filter => '.'}
+            @opts = {:filter => '.', :format => '%B'}
             @opts.merge!(opts) if opts.kind_of?(Hash)
             @changelog = @processed = []
             get_changelog
@@ -54,7 +54,7 @@ module Rake
             cmd << "-c i18n.logOutputEncoding=#{opts[:logoutputencoding]}" if opts[:logoutputencoding]
             # if :since is not set, do not use range
             rev = (opts[:since].to_s.empty? ? '' : "#{opts[:since]}..") + 'HEAD'
-            cmd << 'log' << '--format=%B' << rev
+            cmd << 'log' << "--format=#{opts[:format]}" << rev
             Logger.trace(Logger::VERBOSE, cmd)
             @changelog=%x[#{cmd.join(' ')}].lines.to_a
             @changelog.map! do |line|
