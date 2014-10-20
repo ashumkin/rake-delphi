@@ -52,7 +52,9 @@ module Rake
         def get_changelog
             cmd = ['git']
             cmd << "-c i18n.logOutputEncoding=#{opts[:logoutputencoding]}" if opts[:logoutputencoding]
-            cmd << 'log' << '--format=%B' << "#{opts[:since]}..HEAD"
+            # if :since is not set, do not use range
+            rev = (opts[:since].to_s.empty? ? '' : "#{opts[:since]}..") + 'HEAD'
+            cmd << 'log' << '--format=%B' << rev
             Logger.trace(Logger::VERBOSE, cmd)
             @changelog=%x[#{cmd.join(' ')}].lines.to_a
             @changelog.map! do |line|
