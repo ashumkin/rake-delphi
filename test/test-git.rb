@@ -84,7 +84,7 @@ public
     def test_changelog_last
         Rake::Delphi::ChDir.new(@rake_task, @test_git_dir) do
             chlog = Rake::Delphi::GitChangelog.new(@rake_task, nil)
-            assert_equal [], chlog.changelog, 'Changelog'
+            assert_equal ["line two added message", "file content added", "first commit"], chlog.changelog, 'Changelog'
             assert_equal [], chlog.processed, 'Processed'
         end
     end
