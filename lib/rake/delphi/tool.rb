@@ -7,6 +7,11 @@ require 'rake/delphi/envvariables'
 
 module Rake
   module Delphi
+    DELPHI_VERSION_7 = 9
+    DELPHI_VERSION_2006 = 11
+    DELPHI_VERSION_2010 = 13
+    DELPHI_VERSION_XE = 14
+    DELPHI_VERSION_XE5 = 18
     class CustomDelphiTool < CustomExec
         DelphiRegRoot =  'SOFTWARE\\Borland\\Delphi'
         BDSRegRoot = 'SOFTWARE\\Borland\\BDS'
@@ -44,9 +49,9 @@ module Rake
         end
 
         def versionInfoClass
-            return @@version.to_f < 11 ? BDSVersionInfo : \
-                @@version.to_f < 13 ? RAD2007VersionInfo : \
-                @@version.to_f < 14 ? RAD2010VersionInfo : XEVersionInfo
+            return @@version.to_f < DELPHI_VERSION_2006 ? BDSVersionInfo : \
+                @@version.to_f < DELPHI_VERSION_2010 ? RAD2007VersionInfo : \
+                @@version.to_f < DELPHI_VERSION_XE ? RAD2010VersionInfo : XEVersionInfo
         end
 
         def self.readUserOption(key, name, ver)
@@ -73,7 +78,7 @@ module Rake
         end
 
         def self.version4version(version)
-            if version.to_f >= 9
+            if version.to_f >= DELPHI_VERSION_7
                 version = format('%.1f', version.to_f - 6)
             end
             if !version["."]
@@ -83,12 +88,12 @@ module Rake
         end
 
         def self.rootForVersion(version)
-            if version.to_f < 9
+            if version.to_f < DELPHI_VERSION_7
                 regRoot = DelphiRegRoot
             else
-                if version.to_f < 12
+                if version.to_f <= DELPHI_VERSION_2006
                     regRoot = BDSRegRoot
-                elsif version.to_f < 14
+                elsif version.to_f < DELPHI_VERSION_XE
                     regRoot = EDSRegRoot
                 else
                     regRoot = EmbarcaderoRegRoot
@@ -124,7 +129,7 @@ module Rake
         end
 
         def self.find(failIfNotFound = false)
-            v = EnvVariables.delphi_version
+            v = EnvVariables.delphi_version.to_s
             if ENV['DELPHI_DIR']
                 Logger.trace(Logger::DEBUG, 'DELPHI_DIR is set: ' + ENV['DELPHI_DIR'])
                 # append trailing path delimiter

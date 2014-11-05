@@ -26,7 +26,7 @@ module Rake
 
         def readLibraryPaths(platform, platform_stripped)
             Logger.trace(Logger::TRACE, 'Reading library paths for platform: ' + platform.to_s)
-            warn "WARNING! You are using Delphi XE or above but no platform defined!" if ENV['DELPHI_VERSION'].to_i >= 14 && ! platform
+            warn "WARNING! You are using Delphi XE or above but no platform defined!" if ENV['DELPHI_VERSION'].to_i >= DELPHI_VERSION_XE && ! platform
 
             platform = platform.to_s != '' ? '\\' + platform : ''
             # platform not used for old Delphis 'SearchPath'

@@ -26,7 +26,7 @@ module TestAndroidModule
 
     desc 'Preparation'
     task :prepare, :useresources, :options do |t, opts|
-      fail 'Cannot compile this project with Delphi below XE5' if ENV['DELPHI_VERSION'].to_i < 18
+      fail 'Cannot compile this project with Delphi below XE5' if Rake::Delphi::EnvVariables.delphi_version < Rake::Delphi::DELPHI_VERSION_XE5
       _task = Rake::Task['test_android:compile']
       dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.name + ':delphi').to_sym)
       dpr[:resources_additional] = 'resources' if opts[:useresources]

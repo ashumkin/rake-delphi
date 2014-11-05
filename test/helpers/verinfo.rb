@@ -22,7 +22,7 @@ class TestVerInfo < Test::Unit::TestCase
 
 protected
     def delphi_version
-        return Rake::Delphi::EnvVariables.delphi_version
+        return Rake::Delphi::EnvVariables.delphi_version.to_s
     end
 
     def prepare_ver_info_file?
@@ -39,7 +39,7 @@ protected
 
 public
     def setup
-        @saved_delphi_version = Rake::Delphi::EnvVariables.delphi_version
+        @saved_delphi_version = Rake::Delphi::EnvVariables.delphi_version.to_s
         ENV['DELPHI_VERSION'] = delphi_version
 
         template_ext = DPROJ_VERSIONS[delphi_version]

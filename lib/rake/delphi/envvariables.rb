@@ -5,7 +5,7 @@ module Rake
   module Delphi
     class EnvVariables < ::Hash
         def self.delphi_version
-            ENV['DELPHI_VERSION']
+            ENV['DELPHI_VERSION'].to_i
         end
 
         def initialize(regpath, delphidir)

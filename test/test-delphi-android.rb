@@ -5,6 +5,7 @@ require 'rake'
 require 'fileutils'
 require 'test/unit'
 require 'rake/delphi/dccaarmtool'
+require 'rake/delphi/envvariables'
 require 'rake/helpers/unittest'
 require 'rake/helpers/raketask'
 require 'helpers/consts'
@@ -100,7 +101,7 @@ module DelphiAndroidTests
 
   public
     def setup
-      fail 'Cannot compile this project with Delphi below XE5' if ENV['DELPHI_VERSION'].to_i < 18
+      fail 'Cannot compile this project with Delphi below XE5' if Rake::Delphi::EnvVariables.delphi_version < Rake::Delphi::DELPHI_VERSION_XE5
       Rake::Delphi::DccARMTool.reinit
       ENV['DELPHI_DIR'] = nil
       super
