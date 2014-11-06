@@ -129,6 +129,7 @@ module Rake
 
         def implicitpaths
             ipaths = ['.', '..']
+            Logger.trace(Logger::TRACE, 'Using library paths? %s' + (@uselibrarypath ? 'YES' : 'NO'))
             ipaths |= delphilibs if @uselibrarypath
             _paths(ipaths)
         end
