@@ -245,6 +245,8 @@ module Rake
             mv output_platform.pathmap('%p%s') + @suffix + _source.pathmap('%s%n.apk'), output_platform
           end
         end
+        # reset files (for reusage, mainly in tests)
+        @deploymentfiles = nil
       end
     end # class PAClientTask
   end

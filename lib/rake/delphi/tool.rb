@@ -140,7 +140,7 @@ module Rake
             end
             if v.to_s.empty?
                 v = []
-                (4..20).each { |n| v << n.to_s }
+                (4..21).each { |n| v << n.to_s }
                 v.reverse!
             else
                 Logger.trace(Logger::DEBUG, 'DELPHI_VERSION is set: ' + v)

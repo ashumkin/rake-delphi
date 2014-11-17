@@ -17,17 +17,13 @@ require 'xmlsimple'
 module DelphiAndroidTests
 
   class TestDelphiAndroid < DelphiTests::TestVerInfo
-  public
-    def project_path
-      PROJECT_PATH
+  protected
+    def delphi_version
+      return '18'
     end
 
-    def project_name
-      PROJECT_APK.pathmap('%n')
-    end
-
-  private
-    REQUIRED_FILES = %Q[META-INF/MANIFEST.MF
+    def setup_required_files
+      @required_files = %Q[META-INF/MANIFEST.MF
         META-INF/ANDROIDD.SF
         META-INF/ANDROIDD.RSA
         lib/armeabi/libTestProject.so
@@ -38,18 +34,30 @@ module DelphiAndroidTests
         res/drawable-ldpi/ic_launcher.png
         res/drawable-mdpi/ic_launcher.png
         res/drawable-xhdpi/ic_launcher.png
-        res/drawable-xxhdpi/ic_launcher.png].split(/\s+/)
+        res/drawable-xxhdpi/ic_launcher.png
+      ].split(/\s+/)
+    end
 
+  public
+    def project_path
+      PROJECT_PATH
+    end
+
+    def project_name
+      PROJECT_APK.pathmap('%n')
+    end
+
+  private
     def _test_apk(apk)
       entries = []
       Zip::ZipFile.open(apk) do |zip|
         zip.each do |entry|
           # test all files in .apk
-          assert REQUIRED_FILES.include?(entry.to_s), entry.to_s
+          assert @required_files.include?(entry.to_s), entry.to_s
           entries << entry.to_s
         end
       end
-      REQUIRED_FILES.each do |file|
+      @required_files.each do |file|
         # test all required file
         assert entries.include?(file), file
       end
@@ -102,6 +110,7 @@ module DelphiAndroidTests
   public
     def setup
       fail 'Cannot compile this project with Delphi below XE5' if Rake::Delphi::EnvVariables.delphi_version < Rake::Delphi::DELPHI_VERSION_XE5
+      setup_required_files
       Rake::Delphi::DccARMTool.reinit
       ENV['DELPHI_DIR'] = nil
       super

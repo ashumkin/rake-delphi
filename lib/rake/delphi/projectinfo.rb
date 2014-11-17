@@ -99,6 +99,7 @@ module Rake
     private
       def read_file_class(platform, node, hash, key)
         platforms = node['Platform']
+        return unless platforms
         unless platforms.kind_of?(Array)
           platforms = [platforms]
         end
@@ -133,14 +134,26 @@ module Rake
         return files, classes
       end
 
+      def is_special_class_for_bds_path(class_name)
+        ['AndroidClassesDexFile', /AndroidLibnative.+/i].each do |templ|
+          if templ.kind_of?(Regexp)
+            r = templ.match(class_name)
+          else
+            r = templ == class_name
+          end
+          return r if r
+        end
+        return false
+      end
+
       def make_deployment(files, classes)
         r = []
         files.each do |file, value|
           value_class = value['Class']
           _class = classes[value_class]
           next if ['AndroidGDBServer', 'ProjectAndroidManifest'].include?(value_class)
-          if value_class == 'AndroidClassesDexFile'
-            # dirty hack for 'classes.dex'
+          if is_special_class_for_bds_path(value_class)
+            # dirty hack for special classes
             # usually .dproj has full path to it
             # but we may have another path
             # so remove 'first' part
@@ -149,6 +162,8 @@ module Rake
           remote_name = value['Platform'] ? value['Platform']['RemoteName'] : file.pathmap('%f')
           if value_class == 'ProjectOutput'
             file = :project_so
+          elsif value_class == 'ProjectFile'
+            _class = value
           end
           r << { file => [_class['Platform']['RemoteDir'] + '\\', '1', remote_name] }
         end
