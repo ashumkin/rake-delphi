@@ -42,7 +42,7 @@ module Rake
 
         def init(module_name, rake_file, vars, level = 1)
             @level = level
-            module_name = module_name.dup.pop.to_s
+            module_name = module_name.dup.shift.to_s
             self[:projectlabel] = eval("#{module_name}::PROJECT_NAME")
             projectfile = eval("#{module_name}::PROJECT_FILE")
             self[:projectfile] = File.dirname2(rake_file) + File.separator +  projectfile
