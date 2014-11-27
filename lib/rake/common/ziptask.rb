@@ -68,6 +68,8 @@ module Rake
                 # avoid "./<filename>" entries (instead of "<filename>")
                 filename = File.join(dir, filename) if dir != '.'
 
+                # remove leading slash (for absolute paths)
+                filename.gsub!(/^\//, '')
             end
             zipfile.add(filename, file)
         end
