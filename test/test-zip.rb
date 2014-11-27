@@ -30,6 +30,20 @@ public
 
     def test_zip_file
         Rake::Delphi::ZipTask.new(@rake_task, @zip, [__FILE__])
+        assert(File.exists?(@zip), "File #{@zip} not created")
+    end
+
+    def test_zip_file_twice
+        test_zip_file
+        test_zip_file
+    end
+
+    def test_add_to_zip_file
+        test_zip_file
+        Rake::Delphi::ZipTask.new(@rake_task, @zip, [__FILE__], { :preserve_paths => true, :add => true })
         assert(File.exists?(@zip))
+        Zip::ZipFile.open(@zip) do |z|
+            assert_equal 2, z.entries.length, 'Files in an archive'
+        end
     end
 end
