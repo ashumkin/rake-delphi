@@ -2,6 +2,7 @@
 
 require 'zlib'
 require 'rake/common/classes'
+require 'rake/common/logger'
 require 'rake/helpers/raketask'
 
 module Rake
