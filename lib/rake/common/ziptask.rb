@@ -42,32 +42,18 @@ module Rake
             @norubyzip = nil
             @options = options || {}
             begin
-                require 'zipruby'
+                require 'zip/zip'
             rescue LoadError
-                begin
-                    require 'zip/zip'
-                rescue LoadError
-                    @norubyzip = true
-                end
+                @norubyzip = true
             end
-            raise "no ZIP library (nor zipruby nor rubyzip) found!" if @norubyzip
-            if defined? Zip::Archive
-                # zipruby used
-                Logger.trace(Logger::VERBOSE, '`zipruby` gem is used')
-                Zip::Archive.open(zipfile, Zip::CREATE | Zip::TRUNC) do |z|
-                    files.each do |f|
-                        zip_addfile(z, f)
-                    end
-                end
-            else
-                # work with rubyzip
-                Logger.trace(Logger::VERBOSE, '`rubyzip` gem is used')
-                File.unlink(zipfile) if File.exists?(zipfile)
-                Zip.options[:continue_on_exists_proc] = true
-                Zip::ZipFile.open(zipfile, Zip::ZipFile::CREATE) do |z|
-                    files.each do |f|
-                        zip_addfile(z, f)
-                    end
+            raise "no ZIP library (rubyzip) found!" if @norubyzip
+            # work with rubyzip
+            Logger.trace(Logger::VERBOSE, '`rubyzip` gem is used')
+            File.unlink(zipfile) if File.exists?(zipfile) && ! @options[:add]
+            Zip.options[:continue_on_exists_proc] = true
+            Zip::ZipFile.open(zipfile, Zip::ZipFile::CREATE) do |z|
+                files.each do |f|
+                    zip_addfile(z, f)
                 end
             end
         end
@@ -77,22 +63,13 @@ module Rake
             return if ! File.exists?(file)
             filename = File.basename(file)
             @task.out "Zipping #{file}..."
-            if defined? Zip::Archive
-                if @options[:preserve_paths]
-                    if ! zipfile.locate_name(File.dirname(file))
-                        zipfile.add_dir(File.dirname(file))
-                    end
-                    filename = file
-                end
-                zipfile.add_file(filename, file)
-            else
-                if @options[:preserve_paths]
-                    dir = File.dirname(file)
-                    # avoid "./<filename>" entries (instead of "<filename>")
-                    filename = File.join(dir, filename) if dir != '.'
-                end
-                zipfile.add(filename, file)
+            if @options[:preserve_paths]
+                dir = File.dirname(file)
+                # avoid "./<filename>" entries (instead of "<filename>")
+                filename = File.join(dir, filename) if dir != '.'
+
             end
+            zipfile.add(filename, file)
         end
     end
   end
