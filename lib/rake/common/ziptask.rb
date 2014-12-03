@@ -60,10 +60,21 @@ module Rake
 
     private
         def zip_addfile(zipfile, file)
+            filename_set = false
+            if file.kind_of?(Hash)
+                filename = file.values.first
+                file = file.keys.first
+                filename_set = true
+                # if directory name given append filename to its path
+                if /\/$/.match(filename)
+                  filename += File.basename(file)
+                end
+            else
+                filename = File.basename(file)
+            end
             return if ! File.exists?(file)
-            filename = File.basename(file)
-            @task.out "Zipping #{file}..."
-            if @options[:preserve_paths]
+            @task.out "Zipping '#{file}' as '#{filename}'..."
+            if @options[:preserve_paths] && ! filename_set
                 dir = File.dirname(file)
                 # avoid "./<filename>" entries (instead of "<filename>")
                 filename = File.join(dir, filename) if dir != '.'

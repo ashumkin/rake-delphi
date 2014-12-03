@@ -46,4 +46,22 @@ public
             assert_equal 2, z.entries.length, 'Files in an archive'
         end
     end
+
+    def test_add_to_zip_file_customname
+        test_add_to_zip_file
+        Rake::Delphi::ZipTask.new(@rake_task, @zip, [{__FILE__ => 'folder/custom_name'}], { :preserve_paths => true, :add => true })
+        assert(File.exists?(@zip))
+        Zip::ZipFile.open(@zip) do |z|
+            assert_equal 3, z.entries.length, 'Files in an archive'
+        end
+    end
+
+    def test_add_to_zip_file_customname_foldername
+        test_add_to_zip_file
+        Rake::Delphi::ZipTask.new(@rake_task, @zip, [{__FILE__ => 'folder/custom_name/'}], { :preserve_paths => true, :add => true })
+        assert(File.exists?(@zip))
+        Zip::ZipFile.open(@zip) do |z|
+            assert_equal 3, z.entries.length, 'Files in an archive'
+        end
+    end
 end
