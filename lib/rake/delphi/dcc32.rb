@@ -22,7 +22,7 @@ module Rake
             :debuginfo, :localsymbols, :console, :warnings, :hints, :altercfg,
             :includepaths, :writeableconst,
             :map, :dcuoutput, :bploutput, :aliases, :platform, :namespaces,
-            :dcpoutput, :dcu, :uselibrarypath, :uselibrarypath, :usecfg, :dcc_options]
+            :dcpoutput, :dcu, :uselibrarypath, :usecfg, :dcc_options]
     public
         @@symbols.map do |sym|
             attr_accessor sym unless method_defined?(sym)
@@ -129,7 +129,7 @@ module Rake
 
         def implicitpaths
             ipaths = ['.', '..']
-            Logger.trace(Logger::TRACE, 'Using library paths? %s' + (@uselibrarypath ? 'YES' : 'NO'))
+            Logger.trace(Logger::TRACE, 'Using library paths? %s' % (@uselibrarypath ? 'YES' : 'NO'))
             ipaths |= delphilibs if @uselibrarypath
             _paths(ipaths)
         end
