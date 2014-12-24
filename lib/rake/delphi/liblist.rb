@@ -29,9 +29,15 @@ module Rake
 
             def initialize(*patterns)
                 initialize_base(patterns)
-                @exclude_patterns |= read_ignored_libs
+                @exclude_patterns_libs = read_ignored_libs
                 @exclude_procs << proc do |fn|
                   ! File.directory?(fn)
+                end << proc do |fn|
+                  @exclude_patterns_libs.any? do |pat|
+                    match = fn =~ pat
+                    Logger.trace(Logger::TRACE, "Dir #{fn} match pattern /#{pat}/. Ignored") if match
+                    match
+                  end
                 end
             end
         end
