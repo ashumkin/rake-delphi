@@ -81,6 +81,8 @@ module Rake
                 # remove leading slash (for absolute paths)
                 filename.gsub!(/^\//, '')
             end
+            # do not add directory entries
+            return if File.directory?(file)
             @task.out "Zipping '#{file}' as '#{filename}'..."
             zipfile.add(filename, file)
         end
