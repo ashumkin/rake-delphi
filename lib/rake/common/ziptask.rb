@@ -73,7 +73,6 @@ module Rake
                 filename = File.basename(file)
             end
             return if ! File.exists?(file)
-            @task.out "Zipping '#{file}' as '#{filename}'..."
             if @options[:preserve_paths] && ! filename_set
                 dir = File.dirname(file)
                 # avoid "./<filename>" entries (instead of "<filename>")
@@ -82,6 +81,7 @@ module Rake
                 # remove leading slash (for absolute paths)
                 filename.gsub!(/^\//, '')
             end
+            @task.out "Zipping '#{file}' as '#{filename}'..."
             zipfile.add(filename, file)
         end
     end
