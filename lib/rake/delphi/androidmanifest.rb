@@ -9,9 +9,10 @@ require 'rake/common/chdirtask'
 module Rake
   module Delphi
     class AndroidManifestInfo
+      attr_accessor :version
+
       def initialize(owner)
         @owner = owner
-        @version = '1.3.2.4'
       end
 
       def get_binding
@@ -42,6 +43,9 @@ module Rake
         super
         paclientTaskName = name.gsub(/:manifest$/, '')
         @dccTask = application[paclientTaskName].dccTask
+        projectTaskName = @dccTask.name.gsub(/:dcc32$/, '')
+        projectTask = application[projectTaskName]
+        @template_obj.version = projectTask.properties[:version]
         ChDir.new(self, File.dirname(@dccTask.dpr)) do |dir|
           RakeFileUtils.verbose(Logger.debug?) do
             erb = ERB.new(IO.read(@template))
