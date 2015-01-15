@@ -40,7 +40,7 @@ module Rake
             @dcc.init_libs(self[:includepaths])
         end
 
-        def init(module_name, rake_file, vars, level = 1)
+        def init(module_name, rake_file, vars, level)
             @level = level
             module_name = module_name.dup.shift.to_s
             self[:projectlabel] = eval("#{module_name}::PROJECT_NAME")
