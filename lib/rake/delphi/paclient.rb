@@ -33,6 +33,7 @@ module Rake
       end
 
       def needed=(value)
+        Logger.trace(Logger::DEBUG, name + ': .needed set to ' + value.to_s)
         super
         @manifest.needed = value
       end
