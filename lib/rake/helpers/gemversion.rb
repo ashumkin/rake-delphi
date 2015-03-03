@@ -3,7 +3,9 @@
 module Gem
     class VersionImproved < Version
         def initialize(version)
-            super
+            # dup version
+            # to avoid error on earlier versions of Gem::Version with frozen strings
+            super(version.nil? ? version : version.dup)
             @version = '0.0.0.0' if @version.empty?
             # avoid bug when Gem::Version <= 1.3.7
             @segments = nil

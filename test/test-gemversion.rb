@@ -24,6 +24,10 @@ public
         assert_equal '0,0,0,0', Gem::VersionImproved.new('').comma
     end
 
+    def test_frozen_string
+        assert_equal '1.2.3.4', Gem::VersionImproved.new('1.2.3.4'.freeze).to_s
+    end
+
     def test_comma
         assert_equal '1,2,3,4', Gem::VersionImproved.new('1.2.3.4').comma
     end
