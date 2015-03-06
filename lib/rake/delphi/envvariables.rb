@@ -32,7 +32,9 @@ module Rake
                 begin
                     ::Win32::Registry::HKEY_CURRENT_USER.open(regpath) do |reg|
                         reg.each do |name|
+                            Logger.trace(Logger::DEBUG, "Reading: #{name}")
                             reg_type, value = reg.read(name)
+                            Logger.trace(Logger::TRACE, "Value: #{value}")
                             value.gsub!('\\', '/')
                             add(name, value)
                         end

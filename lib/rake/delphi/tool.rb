@@ -64,6 +64,7 @@ module Rake
                     ::Win32::Registry::HKEY_CURRENT_USER.open(root) do |reg|
                         key_exists = true
                         reg_typ, reg_val = reg.read(name)
+                        Logger.trace(Logger::TRACE, "Value: #{reg_val}")
                         return reg_val.gsub('\\', '/')
                     end
                 rescue ::Win32::Registry::Error
