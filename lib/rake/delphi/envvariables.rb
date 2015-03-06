@@ -39,8 +39,8 @@ module Rake
                             add(name, value)
                         end
                     end
-                rescue ::Win32::Registry::Error
-                    Logger.trace(Logger::DEBUG, "No reg key '%s'?!" % regpath)
+                rescue ::Win32::Registry::Error => e
+                    Logger.trace(Logger::DEBUG, "No reg key '%s'?! %s" % [regpath, e.message])
                 end
             rescue LoadError
                 Logger.trace(Logger::DEBUG, 'No `win32/registry` gem?!')

@@ -67,9 +67,9 @@ module Rake
                         Logger.trace(Logger::TRACE, "Value: #{reg_val}")
                         return reg_val.gsub('\\', '/')
                     end
-                rescue ::Win32::Registry::Error
-                    Logger.trace(Logger::DEBUG, "No reg key '%s'?!" % \
-                      (key_exists ? "#{root}\\#{name}" : root))
+                rescue ::Win32::Registry::Error => e
+                    Logger.trace(Logger::DEBUG, "No reg key '%s'?! %s" % \
+                      [(key_exists ? "#{root}\\#{name}" : root), e.message])
                     return ''
                 end
             rescue LoadError
