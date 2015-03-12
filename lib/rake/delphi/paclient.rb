@@ -78,6 +78,7 @@ module Rake
         tempfile.close
         tempfile = File.expand_path2(tempfile.path)
         tempfile.double_delimiters!
+        tempfile = Rake.quotepath('', tempfile)
         output = @dccTask.exeoutput
         output += '\\' + @suffix
         output.double_delimiters!
