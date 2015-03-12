@@ -65,12 +65,16 @@ module Rake
 
         def dcu=(value)
           # delete previously defined
+          Logger.trace(Logger::TRACE, "New DCU set: #{value}")
           @prerequisites.delete_if do |d|
-            if d.kind_of?(Rake::FileCreationTask)
-               d.name.casecmp(@dcu) == 0
+            if d.kind_of?(Rake::FileCreationTask) && d.name.casecmp(@dcu) == 0
+              Logger.trace(Logger::TRACE, "Removed previously defined DCU task: #{@dcu}")
+              true
             end
           end
-          @dcu = value
+          @dcu = File.expand_path(value, dpr)
+          Logger.trace(Logger::TRACE, "DPR path: #{dpr}")
+          Logger.trace(Logger::TRACE, "Define new DCU task: #{@dcu}")
           dcu_task = directory @dcu
           enhance([dcu_task])
         end
@@ -223,6 +227,8 @@ module Rake
 
         def init(properties)
             Logger.trace(Logger::TRACE, properties)
+            # set @_source BEFORE properties
+            @_source = properties[:projectfile].pathmap('%X.dpr')
             properties.map do |key, value|
                 begin
                     send("#{key}=", value)
@@ -230,7 +236,6 @@ module Rake
                     instance_variable_set("@#{key}", value)
                 end
             end
-            @_source = properties[:projectfile].pathmap('%X.dpr')
             src = @_source.gsub('\\', '/')
             # make sure to create dir for output dcu
             # for now default is <PROJECTDIR>/dcu

@@ -48,6 +48,10 @@ module DelphiAndroidTests
     end
 
   private
+    def _name_as_path(name)
+      name.gsub(/[():]/, '_')
+    end
+
     def _test_apk(apk)
       entries = []
       Zip::ZipFile.open(apk) do |zip|
@@ -77,10 +81,12 @@ module DelphiAndroidTests
       end
 
       bin_dir = File.dirname(apk)
-      dcu_dir_rel = '../../tmp/android/dcu'
-      dcu_dir = bin_dir + '/../../' + dcu_dir_rel
-      FileUtils.mkdir_p(bin_dir)
-      FileUtils.mkdir_p(dcu_dir)
+      dcu_dir_rel = "../../../tmp/#{_name_as_path(self.class.name)}/dcu"
+      [bin_dir].each do |d|
+        d = File.expand_path(d)
+        puts "mkdir #{d}"
+        FileUtils.mkdir_p(bin_dir)
+      end
       # reenable task for subsequent calls
       prepare_task = ::Rake::Task['test_android:prepare']
       prepare_task.reenable
@@ -104,7 +110,7 @@ module DelphiAndroidTests
     end
 
     def apk
-      return PROJECT_APK % name.gsub(/[():]/, '_')
+      return PROJECT_APK % [_name_as_path(self.class.name), _name_as_path(name)]
     end
 
   public

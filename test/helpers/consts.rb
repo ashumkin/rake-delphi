@@ -5,5 +5,5 @@ end
 
 module DelphiAndroidTests
     PROJECT_PATH = File.expand_path('../../resources/testproject-android', __FILE__)
-    PROJECT_APK = PROJECT_PATH + '/../../tmp/android/bin/%s/TestProject.apk'
+    PROJECT_APK = PROJECT_PATH + '/../../tmp/%s/bin/%s/TestProject.apk'
 end
