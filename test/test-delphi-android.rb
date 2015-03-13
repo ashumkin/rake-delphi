@@ -57,13 +57,13 @@ module DelphiAndroidTests
       Zip::ZipFile.open(apk) do |zip|
         zip.each do |entry|
           # test all files in .apk
-          assert @required_files.include?(entry.to_s), entry.to_s
+          assert @required_files.include?(entry.to_s), 'Unexpected entry: ' + entry.to_s
           entries << entry.to_s
         end
       end
       @required_files.each do |file|
         # test all required file
-        assert entries.include?(file), file
+        assert entries.include?(file), 'Missing entry: ' + file
       end
       xml = ApkXml.new(apk)
       manifest = xml.parse_xml('AndroidManifest.xml')
