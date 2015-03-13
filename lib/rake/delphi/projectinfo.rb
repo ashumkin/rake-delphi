@@ -148,15 +148,20 @@ module Rake
 
       def make_deployment(files, classes)
         r = []
+        Logger.trace(Logger::TRACE, "Gathering deployment files")
         files.each do |file, value|
           value_class = value['Class']
           _class = classes[value_class]
-          next if ['AndroidGDBServer', 'ProjectAndroidManifest'].include?(value_class)
+          if ['AndroidGDBServer', 'ProjectAndroidManifest'].include?(value_class)
+            Logger.trace(Logger::TRACE, "Skip #{file} of '#{value_class}'")
+            next
+          end
           if is_special_class_for_bds_path(value_class)
             # dirty hack for special classes
             # usually .dproj has full path to it
             # but we may have another path
             # so remove 'first' part
+            Logger.trace(Logger::TRACE, "#{file} of '#{value_class}' is a special case: prepend with $(BDS)")
             file = file.gsub(/^.+(\\lib\\android\\)/, '$(BDS)\1')
           end
           remote_name = value['Platform'] ? value['Platform']['RemoteName'] : file.pathmap('%f')
