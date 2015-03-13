@@ -291,6 +291,11 @@
                         <RemoteName>ic_launcher.png</RemoteName>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="some\deployment\file\with\operation=0\class" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>release.conf</RemoteName>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AndroidGDBServer">
                     <Platform Name="Android">
                         <RemoteDir>library\lib\armeabi</RemoteDir>

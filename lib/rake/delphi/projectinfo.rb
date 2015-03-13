@@ -169,8 +169,14 @@ module Rake
             file = :project_so
           elsif value_class == 'ProjectFile'
             _class = value
+          elsif _class['Platform']['Operation'].to_i == 0
+            Logger.trace(Logger::TRACE, "Operation=0 for '#{value_class}'")
+            next
           end
-          r << { file => [_class['Platform']['RemoteDir'] + '\\', '1', remote_name] }
+          remote_dir = _class['Platform']['RemoteDir'].to_s
+          remote_dir = remote_dir.empty? ? '.' : remote_dir
+          remote_dir += '\\'
+          r << { file => [remote_dir, '1', remote_name] }
         end
         return r
       end
