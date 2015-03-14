@@ -298,6 +298,21 @@
                         <RemoteName>ic_launcher.png</RemoteName>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="some\deployment\file\with\operation=0\class" Configuration="Debug" Class="File">
+                    <Platform Name="Android">
+                        <RemoteName>release.conf</RemoteName>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="some\disabled\deployment\file\from\disabled.release.conf" Configuration="Release" Class="FileOperation0">
+                    <Platform Name="Android">
+                        <RemoteName>disabled.release.conf.file</RemoteName>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="some\deployment\file\from\enabled.release.conf" Configuration="Release" Class="FileOperation1">
+                    <Platform Name="Android">
+                        <RemoteName>enabled.release.conf.file</RemoteName>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="external\module.ext" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Android">
                         <RemoteDir>.\assets\internal\</RemoteDir>
@@ -360,6 +375,22 @@
                         <Operation>0</Operation>
                     </Platform>
                 </DeployClass>
+                <DeployClass Name="FileOperation0">
+                    <Platform Name="Android">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="Win32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="FileOperation1">
+                    <Platform Name="Android">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="Android_LauncherIcon36">
                     <Platform Name="Android">
                         <RemoteDir>res\drawable-ldpi</RemoteDir>
@@ -379,6 +410,11 @@
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectAndroidManifest">
+                    <Platform Name="Android">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectFile">
                     <Platform Name="Android">
                         <Operation>1</Operation>
                     </Platform>

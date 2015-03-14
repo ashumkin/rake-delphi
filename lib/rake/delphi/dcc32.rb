@@ -21,7 +21,8 @@ module Rake
         @@symbols = [:quiet, :assertions, :build, :optimization, :debug, :defines,
             :debuginfo, :localsymbols, :console, :warnings, :hints, :altercfg,
             :includepaths, :writeableconst,
-            :map, :dcuoutput, :bploutput, :aliases, :platform, :namespaces,
+            :map, :dcuoutput, :bploutput,
+            :aliases, :platform, :platform_configuration, :namespaces,
             :dcpoutput, :dcu, :uselibrarypath, :usecfg, :dcc_options]
     public
         @@symbols.map do |sym|

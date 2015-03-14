@@ -146,10 +146,11 @@ module Rake
         return false
       end
 
-      def make_deployment(files, classes)
+      def make_deployment(files, classes, configuration)
         r = []
-        Logger.trace(Logger::TRACE, "Gathering deployment files")
+        Logger.trace(Logger::TRACE, "Gathering deployment files for '#{configuration}'")
         files.each do |file, value|
+          next if value['Configuration'].to_s.casecmp(configuration.to_s) != 0
           value_class = value['Class']
           _class = classes[value_class]
           if ['AndroidGDBServer', 'ProjectAndroidManifest'].include?(value_class)
@@ -182,7 +183,7 @@ module Rake
       end
 
     public
-      def deploymentfiles(platform)
+      def deploymentfiles(platform, configuration)
         deployment = @content
         raise 'There is no deployment info! Cannot continue.' unless deployment
         ['ProjectExtensions', 'BorlandProject', 'Deployment'].each do |section|
@@ -191,7 +192,7 @@ module Rake
         end
         warn "#{@file} have no deployment info" unless deployment
         files, classes = read_files_and_classes(deployment, platform)
-        r = make_deployment(files, classes)
+        r = make_deployment(files, classes, configuration)
         return r
       end
     end

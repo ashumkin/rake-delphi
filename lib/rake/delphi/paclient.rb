@@ -53,7 +53,7 @@ module Rake
       end
 
       def put_args
-        @deploymentfiles ||= @dccTask.createVersionInfo.deploymentfiles('Android')
+        @deploymentfiles ||= @dccTask.createVersionInfo.deploymentfiles('Android', @dccTask.platform_configuration)
         r = expand_vars(@deploymentfiles)
         @manifest_hash ||= { :manifest => ['.\\', '1'] }
         # add unless already added before

@@ -30,6 +30,7 @@ module TestAndroidModule
       _task = Rake::Task['test_android:compile']
       dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.name + ':delphi').to_sym)
       dpr[:resources_additional] = 'resources' if opts[:useresources]
+      dpr[:platform_configuration] = 'Debug'
       dpr[:platform] = 'Android32'
       # always use library path for Android
       dpr[:uselibrarypath] = true
