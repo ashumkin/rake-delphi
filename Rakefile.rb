@@ -1,4 +1,5 @@
 # encoding: utf-8
+# vim: set shiftwidth=2 tabstop=2 expandtab:
 
 require 'bundler/gem_tasks'
 require 'bundler/setup'
@@ -16,4 +17,15 @@ Rake::TestTask.new('test') do |t|
     t.libs << 'test'
     t.verbose = true
     Rake::application[t.name].enhance([:"test:prerequisites"])
+end
+
+desc 'Increase gem version'
+task :'version:inc' do
+  next_version = Gem::Version.new(Rake::Delphi::VERSION + '.0').bump
+  puts "Version is #{next_version} now"
+  version_file = File.expand_path('../lib/rake/delphi/version.rb', __FILE__)
+  file_content = File.read(version_file).gsub(/(VERSION = )(.+)$/, "\\1'#{next_version}'")
+  File.open(version_file, 'w') do |f|
+    f.write(file_content)
+  end
 end
