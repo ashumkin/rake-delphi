@@ -165,7 +165,7 @@ module Rake
             Logger.trace(Logger::TRACE, "#{file} of '#{value_class}' is a special case: prepend with $(BDS)")
             file = file.gsub(/^.+(\\lib\\android\\)/, '$(BDS)\1')
           end
-          remote_name = value['Platform'] ? value['Platform']['RemoteName'] : file.pathmap('%f')
+          remote_name = value['Platform'] ? value['Platform']['RemoteName'] : file.dos2unix_separator.pathmap('%f')
           if value_class == 'ProjectOutput'
             file = :project_so
           elsif value_class == 'ProjectFile'
