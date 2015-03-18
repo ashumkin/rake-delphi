@@ -12,7 +12,21 @@ task :"test:prerequisites" do
 		+ ' to run tests with appropriate Delphi compiler' unless ENV['DELPHI_VERSION']
 end
 
-Rake::TestTask.new('test') do |t|
+Rake::TestTask.new('test:no:delphi') do |t|
+    t.ruby_opts << '-d' if Rake.application.options.trace
+    t.libs << 'test'
+    t.test_files = FileList['test/test*'].delete_if do |f|
+      # exclude "delphi" tests
+      /delphi/.match(f)
+    end
+    t.verbose = true
+end
+
+
+desc 'Test on Travis CI (with no Delphi tests)'
+task 'travis' => 'test:no:delphi'
+
+Rake::TestTask.new do |t|
     t.ruby_opts << '-d' if Rake.application.options.trace
     t.libs << 'test'
     t.verbose = true

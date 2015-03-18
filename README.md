@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ashumkin/rake-delphi.svg?branch=master)](https://travis-ci.org/ashumkin/rake-delphi)
+
 # Rake::Delphi
 
 This gem adds an ability to compile automatically Delphi projects
