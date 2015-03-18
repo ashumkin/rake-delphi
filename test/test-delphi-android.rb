@@ -95,7 +95,7 @@ module DelphiAndroidTests
       prepare_args.delete(:useresources)
       prepare_args[:bin] = bin_dir
       prepare_args[:version] = '1.3.2.4'
-      prepare_args[:dcu] = dcu_dir_rel.gsub('/', '\\')
+      prepare_args[:dcu] = dcu_dir_rel.unix2dos_separator
 
       prepare_task.invoke(useresources, prepare_args)
 

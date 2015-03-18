@@ -237,7 +237,7 @@ module Rake
                     instance_variable_set("@#{key}", value)
                 end
             end
-            src = @_source.gsub('\\', '/')
+            src = @_source.dos2unix_separator
             # make sure to create dir for output dcu
             # for now default is <PROJECTDIR>/dcu
             self.dcu = src.pathmap('%d%sdcu') unless @dcu

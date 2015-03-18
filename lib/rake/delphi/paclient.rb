@@ -180,7 +180,7 @@ module Rake
                mkdir a_platform unless File.exists?(a_platform)
              end
            end
-           a.gsub!('/', '\\')
+           a.unix2dos_separator!
            a.double_delimiters!
            a
         end

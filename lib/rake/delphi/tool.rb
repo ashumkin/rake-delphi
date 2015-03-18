@@ -65,7 +65,7 @@ module Rake
                         key_exists = true
                         reg_typ, reg_val = reg.read(name)
                         Logger.trace(Logger::TRACE, "Value: #{reg_val}")
-                        return reg_val.gsub('\\', '/')
+                        return reg_val.dos2unix_separator
                     end
                 rescue ::Win32::Registry::Error => e
                     Logger.trace(Logger::DEBUG, "No reg key '%s'?! %s" % \
@@ -116,7 +116,7 @@ module Rake
                         Logger.trace(Logger::DEBUG, "Finding Delphi dir for #{ver}")
                         regRoot.open(rootForVersion(ver)) do |reg|
                             reg_typ, reg_val = reg.read('RootDir')
-                            return reg_val.gsub('\\', '/')
+                            return reg_val.unix2dos_separator
                         end
                     rescue ::Win32::Registry::Error
                         Logger.trace(Logger::DEBUG, "No reg key '#{regRoot}'?!")

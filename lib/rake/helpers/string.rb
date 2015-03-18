@@ -20,4 +20,20 @@ class String
     def double_delimiters!
         replace(self.double_delimiters)
     end
+
+    def dos2unix_separator
+        gsub('\\', '/')
+    end
+
+    def unix2dos_separator
+        gsub('/', '\\')
+    end
+
+    def dos2unix_separator!
+        replace(self.dos2unix_separator)
+    end
+
+    def unix2dos_separator!
+        replace(self.unix2dos_separator)
+    end
 end

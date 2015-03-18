@@ -10,7 +10,7 @@ class File
 		return @@separator if @@separator
 		# Return `backlash` for Cygwin and Windows (ALT_SEPARATOR)
 		# otherwise - system separator
-		return @@separator = cygwin? ? '\\' : (ALT_SEPARATOR ? ALT_SEPARATOR : SEPARATOR)
+		return @@separator = cygwin? ? '\\' : (ALT_SEPARATOR || SEPARATOR)
 	end
 
 	def self.cygpath(path, flag = nil)

@@ -6,6 +6,7 @@ require 'test/unit'
 require 'rake/delphi'
 require 'rake/delphi/project'
 require 'rake/delphi/tool'
+require 'rake/helpers/string'
 require 'rake/helpers/unittest'
 require 'rake/helpers/raketask'
 require 'helpers/consts'
@@ -34,7 +35,7 @@ private
         useresources = prepare_args[:useresources]
         prepare_args.delete(:useresources)
         prepare_args[:bin] = bin_dir
-        prepare_args[:dcu] = dcu_dir_rel.gsub('/', '\\')
+        prepare_args[:dcu] = dcu_dir_rel.unix2dos_separator
 
         prepare_task.invoke(useresources, prepare_args)
 
