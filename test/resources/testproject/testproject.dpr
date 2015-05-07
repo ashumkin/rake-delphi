@@ -19,13 +19,38 @@ uses
 {$IFDEF RESOURCES}
 {$R 'resources.res' 'resources.rc'}
 {$ENDIF RESOURCES}
+{$IFDEF RESOURCES_EXT}
+{$R 'extended_resources.dres'}
+{$ENDIF RESOURCES_EXT}
 {$IFDEF ASSIGNABLE_CONSTS}
 const
   TEST_CONST: string = '-=ASSIGNED CONST=-';
 {$ENDIF ASSIGNABLE_CONSTS}
+function GetResource(const pResourceName: string): string;
 var
   res: TResourceStream;
   str: TStringStream;
+begin
+  Result := EmptyStr;
+  try
+    res := TResourceStream.Create(HInstance, pResourceName, RT_RCDATA);
+    try
+      str := TStringStream.Create(EmptyStr);
+      try
+        res.SaveToStream(str);
+        Result := str.DataString;
+      finally
+        FreeAndNil(str);
+      end;
+    finally
+      FreeAndNil(res);
+    end;
+  except
+    Result := EmptyStr;
+  end;
+end;
+
+var
   s: string;
 begin
   {$IFDEF DEBUG}
@@ -34,23 +59,8 @@ begin
   {$IFOPT D+}
   Write('D+: ');
   {$ENDIF}
-  s := EmptyStr;
-  try
-    res := TResourceStream.Create(HInstance, 'LOCAL_RESOURCES', RT_RCDATA);
-    try
-      str := TStringStream.Create(EmptyStr);
-      try
-        res.SaveToStream(str);
-        s := str.DataString;
-      finally
-        FreeAndNil(str);
-      end;
-    finally
-      FreeAndNil(res);
-    end;
-  except
-    s := EmptyStr;
-  end;
+  s := GetResource('LOCAL_RESOURCES');
+  s := s + GetResource('LOCAL_RESOURCES_EXT');
   {$IFDEF LIBS}
   s := s + LibUnit.LibUnitFunction;
   {$ENDIF LIBS}

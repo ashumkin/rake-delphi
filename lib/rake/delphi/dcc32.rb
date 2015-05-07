@@ -234,7 +234,12 @@ module Rake
                 else
                     c = c.next
                     rc_task_add = application.define_task(RCTask, shortname + ':rc:add' + c.to_s)
-                    rc_task_add.input = src.pathmap('%d%s') + res
+                    input, output = res.split(':', 2)
+                    rc_task_add.input = src.pathmap('%d%s') + input
+                    if output
+                      # if extension is present set it to output
+                      rc_task_add.output = rc_task_add.output.pathmap('%d%s') + output
+                    end
                 end
                 enhance([rc_task_add])
             end

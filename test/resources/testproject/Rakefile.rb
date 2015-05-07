@@ -31,7 +31,10 @@ namespace :test do
     task :prepare, :useresources, :options do |t, opts|
         _task = Rake::Task['test:compile']
         dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.name + ':delphi').to_sym)
-        dpr[:resources_additional] = 'resources' if opts[:useresources]
+        dpr[:resources_additional] = []
+        dpr[:resources_additional] << 'resources' if opts[:useresources]
+        dpr[:resources_additional] << 'resources_ext:extended_resources.dres' if opts[:useresources] === 'ext'
+        dpr[:resources_additional] = dpr[:resources_additional].join(';')
         if Rake::Delphi::EnvVariables.delphi_version >= Rake::Delphi::DELPHI_VERSION_XE
             dpr[:platform] = 'Win32'
         end

@@ -34,6 +34,7 @@ private
         # prepare arguments
         useresources = prepare_args[:useresources]
         prepare_args.delete(:useresources)
+        prepare_args.delete(:useresources_ext)
         prepare_args[:bin] = bin_dir
         prepare_args[:dcu] = dcu_dir_rel.unix2dos_separator
 
@@ -59,9 +60,9 @@ public
         ENV['DELPHI_DIR'] = nil
         super
         ENV['RAKE_DIR'] = PROJECT_PATH
-        File.unlink(exe) if File.exists?(exe)
-        res = PROJECT_PATH + '/resources.res'
-        File.unlink(res) if File.exists?(res)
+        [exe, PROJECT_PATH + '/resources.res', PROJECT_PATH + '/extended_resources.dres'].each do |file|
+            File.unlink(file) if File.exists?(file)
+        end
         require PROJECT_PATH + '/Rakefile.rb'
     end
 
@@ -83,6 +84,16 @@ public
     def test_compile_with_resources
         _test_compile_and_output({:useresources => true, :defines => 'RESOURCES'},
             'testproject works-=WITH RESOURCES=-')
+    end
+
+    def test_compile_with_resources_ext
+        _test_compile_and_output({:useresources => 'ext', :defines => 'RESOURCES_EXT'},
+            'testproject works-=WITH EXTENDED RESOURCES=-')
+    end
+
+    def test_compile_with_resources_all
+        _test_compile_and_output({:useresources => 'ext', :defines => 'RESOURCES,RESOURCES_EXT'},
+            'testproject works-=WITH RESOURCES=--=WITH EXTENDED RESOURCES=-')
     end
 
     def test_compile_with_libs
