@@ -221,6 +221,25 @@ module Rake
             args.flatten
         end
 
+        def add_resources(src, properties)
+            return unless properties[:resources_additional]
+            res_add = properties[:resources_additional]
+            if res_add.kind_of?(String)
+                res_add = res_add.split(';')
+            end
+            c = 0
+            res_add.each do |res|
+                if res.kind_of?(Symbol)
+                    rc_task_add = res
+                else
+                    c = c.next
+                    rc_task_add = application.define_task(RCTask, shortname + ':rc:add' + c.to_s)
+                    rc_task_add.input = src.pathmap('%d%s') + res
+                end
+                enhance([rc_task_add])
+            end
+        end
+
     public
         def dpr
           @_source
@@ -249,22 +268,8 @@ module Rake
             @rc_task.input = src
             @rc_task.is_rc = properties[:releaseCandidate]
             @rc_task.mainicon_path = @mainicon
-            return unless properties[:resources_additional]
-            res_add = properties[:resources_additional]
-            if res_add.kind_of?(String)
-                res_add = res_add.split(';')
-            end
-            c = 0
-            res_add.each do |res|
-                if res.kind_of?(Symbol)
-                    rc_task_add = res
-                else
-                    c = c.next
-                    rc_task_add = application.define_task(RCTask, shortname + ':rc:add' + c.to_s)
-                    rc_task_add.input = src.pathmap('%d%s') + res
-                end
-                enhance([rc_task_add])
-            end
+
+            add_resources(src, properties)
         end
 
         def init_libs(libs = nil)
