@@ -66,6 +66,7 @@ module DelphiAndroidTests
       tested_deploymentFiles << 'project_so,library\lib\armeabi\,1,libTestProject.so'
       tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.dex'
       tested_deploymentFiles << 'external\module.ext,.\assets\internal\\\\,1,'
+      tested_deploymentFiles << 'external\predefined.db,.\assets\internal\\\\,1,'
       tested_deploymentFiles << '$(BDS)\lib\android\debug\mips\libnative-activity.so,library\lib\mips\,1,libTestProject.so'
       tested_deploymentFiles << '$(BDS)\lib\android\debug\armeabi\libnative-activity.so,library\lib\armeabi\,1,libTestProject.so'
       deploymentfiles = @info.deploymentfiles('Android', 'Debug')

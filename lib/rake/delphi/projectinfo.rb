@@ -166,6 +166,7 @@ module Rake
             file = file.gsub(/^.+(\\lib\\android\\)/, '$(BDS)\1')
           end
           remote_name = value['Platform'] ? value['Platform']['RemoteName'] : file.dos2unix_separator.pathmap('%f')
+          remote_dir = nil
           if value_class == 'ProjectOutput'
             file = :project_so
           elsif value_class == 'ProjectFile'
@@ -173,8 +174,10 @@ module Rake
           elsif _class['Platform']['Operation'].to_i == 0
             Logger.trace(Logger::TRACE, "Operation=0 for '#{value_class}'")
             next
+          else
+            remote_dir = value['Platform']['RemoteDir'] if value['Platform']
           end
-          remote_dir = _class['Platform']['RemoteDir'].to_s
+          remote_dir =  _class['Platform']['RemoteDir'].to_s unless remote_dir
           remote_dir = remote_dir.empty? ? '.' : remote_dir
           remote_dir += '\\'
           r << { file => [remote_dir, '1', remote_name] }

@@ -14,6 +14,7 @@ module DelphiAndroidTests
     def setup_required_files
       super
       @required_files << 'assets/internal/module.ext'
+      @required_files << 'assets/internal/predefined.db'
       @required_files << 'lib/mips/libTestProject.so'
     end
   end
