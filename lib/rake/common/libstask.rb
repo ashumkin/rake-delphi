@@ -11,6 +11,7 @@ module Rake
         def initialize(name, app)
             super
             @original_dir = ENV['RAKE_DIR'] || Rake.original_dir
+            @libs = []
         end
 
         def self.define(name, app)
