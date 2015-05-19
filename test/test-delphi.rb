@@ -16,7 +16,7 @@ module DelphiTests
 
 class TestDelphi < TestVerInfo
 private
-    def _test_compile_and_output(prepare_args, output)
+    def _test_prepare(prepare_args)
         args = [:altercfg, :usecfg, :defines, :debuginfo, :debug, :includepaths]
         # reinitialize arguments (even absent ones)
         args.each do |arg|
@@ -39,7 +39,10 @@ private
         prepare_args[:dcu] = dcu_dir_rel.unix2dos_separator
 
         prepare_task.invoke(useresources, prepare_args)
+    end
 
+    def _test_compile_and_output(prepare_args, output)
+        _test_prepare(prepare_args)
         # reenable tasks (!!! after invoking 'test:prepare')
         task = ::Rake::Task['test:compile']
         task.reenable_chain
