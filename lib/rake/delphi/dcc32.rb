@@ -318,7 +318,10 @@ module Rake
                             # on Windows there is some limit on command line parameters length
                             # so we just append path parameters to config file
                             File.open(cfg, 'a+') do |f|
-                                paths.each do |p|
+                                lpaths = paths
+                                Logger.trace(Logger::TRACE, 'Implicit and included paths:')
+                                Logger.trace(Logger::TRACE, lpaths)
+                                lpaths.each do |p|
                                     f.write(p + "\n")
                                 end
                             end
