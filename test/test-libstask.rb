@@ -28,6 +28,13 @@ public
         end
         # already invoked
         assert_not_equal(nil, task2.libs)
+        # not empty
+        assert_not_equal([], task2.libs)
+    end
+
+    def test_libs_relative_not_executed
+        task2 = Rake::Delphi::LibsTask.define('libs task not executed', Rake.application)
+        assert_equal [], task2.libs
     end
 
     def test_libs_relative
