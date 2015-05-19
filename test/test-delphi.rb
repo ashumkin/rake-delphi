@@ -69,6 +69,13 @@ public
         require PROJECT_PATH + '/Rakefile.rb'
     end
 
+    def test_all_delphi_libs_task_name
+        namespace :test_name do
+            Rake.application.define_task(Rake::Delphi::Project, :'project:delphi')
+        end
+        assert_equal 'test_name:project:delphi:all-delphi-libs', ::Rake::Task['test_name:project:delphi:all-delphi-libs'].name
+    end
+
     def test_compile
         _test_compile_and_output({},
             'testproject works')
