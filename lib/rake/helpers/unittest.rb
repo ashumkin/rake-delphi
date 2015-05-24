@@ -9,7 +9,7 @@ if defined? MiniTest::Unit::TestCase && Test::Unit::TestCase < MiniTest::Unit::T
             class TestCase
                 def name
                     __name__
-                end
+                end unless instance_methods.include?(:name)
             end
         end
     end
