@@ -28,10 +28,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_runtime_dependency "bundler", "~> 1.3"
+  spec.add_runtime_dependency "rake", "~> 10.0.4"
+  spec.add_runtime_dependency "xml-simple"
+  spec.add_runtime_dependency "inifile"
   spec.add_development_dependency "minitest", "~> 4.3"
-  spec.add_development_dependency "rake", "~> 10.0.4"
-  spec.add_development_dependency "xml-simple"
   spec.add_development_dependency "rubyzip", "~> 0.9.9"
   spec.add_development_dependency "apktools"
 end
