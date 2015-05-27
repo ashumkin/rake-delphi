@@ -38,6 +38,16 @@ module Gem
         end
 
         ##
+        # The build number
+        def build_num
+            segments = self.segments.dup
+            segments.pop while segments.any? { |s| String === s }
+            segments.pop while segments.size > 4
+
+            segments.size == 4 ? segments[-1] : nil
+        end
+
+        ##
         # Returns release only part
         # (e.g. 1.2.3.4 -> 3, 1.2.3 -> 2)
         def release_num
@@ -46,6 +56,22 @@ module Gem
             segments.pop if segments.size > 1
 
             segments[-1]
+        end
+
+        def major
+            segments = self.segments.dup
+            segments.pop while segments.any? { |s| String === s }
+            segments.pop while segments.size > 1
+
+            segments[-1]
+        end
+
+        def minor
+            segments = self.segments.dup
+            segments.pop while segments.any? { |s| String === s }
+            segments.pop while segments.size > 2
+
+            segments.size == 2 ? segments[-1] : nil
         end
 
         def comma

@@ -32,6 +32,17 @@ public
         assert_equal '1,2,3,4', Gem::VersionImproved.new('1.2.3.4').comma
     end
 
+    def test_build_num
+        @version = Gem::VersionImproved.new('1.2.3.4')
+        assert_equal 4, @version.build_num
+
+        @version = Gem::VersionImproved.new('1.2.3')
+        assert_equal nil, @version.build_num
+
+        @version = Gem::VersionImproved.new('1.2')
+        assert_equal nil, @version.build_num
+    end
+
     def test_release_num
         @version = Gem::VersionImproved.new('1.2.3.4')
         assert_equal 3, @version.release_num
@@ -72,5 +83,33 @@ public
 
         @version = Gem::VersionImproved.new('1.x')
         assert_equal '2', @version.build.version
+    end
+
+    def test_major
+        @version = Gem::VersionImproved.new('1.2.3.4')
+        assert_equal 1, @version.major
+
+        @version = Gem::VersionImproved.new('5.2.3')
+        assert_equal 5, @version.major
+
+        @version = Gem::VersionImproved.new('3.2')
+        assert_equal 3, @version.major
+
+        @version = Gem::VersionImproved.new('4')
+        assert_equal 4, @version.major
+    end
+
+    def test_minor
+        @version = Gem::VersionImproved.new('1.2.3.4')
+        assert_equal 2, @version.minor
+
+        @version = Gem::VersionImproved.new('5.4.3')
+        assert_equal 4, @version.minor
+
+        @version = Gem::VersionImproved.new('3.1')
+        assert_equal 1, @version.minor
+
+        @version = Gem::VersionImproved.new('4')
+        assert_equal nil, @version.minor
     end
 end
