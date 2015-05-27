@@ -25,7 +25,7 @@ module Rake
         end
 
         def method_missing(name, *args, &block)
-            @info[name]
+            @info[name].gsub('"', '""') if @info[name]
         end
     end
 
