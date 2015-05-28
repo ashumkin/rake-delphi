@@ -63,8 +63,10 @@ module Rake
         def method_missing(name, *args, &block)
             if args.empty? && @extra[name]
                 @extra[name]
-            elsif
-                @source.name
+            elsif @source
+              @source.name
+            else
+              raise 'No key :%s' % name.to_s
             end
         end
     end
