@@ -15,6 +15,7 @@ module Rake
         alias :method_missing_base :method_missing
 
         def initialize(owner)
+            raise 'RCTemplateTask owner is expected' unless owner.kind_of?(RCTemplateTask)
             @owner = owner
             # English
             @language = '0x19'
