@@ -28,7 +28,7 @@ module DelphiAndroidTests
         META-INF/ANDROIDD.RSA
         lib/armeabi/libTestProject.so
         AndroidManifest.xml
-        classes.dex
+        classes.debug.dex
         resources.arsc
         res/drawable-hdpi/ic_launcher.png
         res/drawable-ldpi/ic_launcher.png

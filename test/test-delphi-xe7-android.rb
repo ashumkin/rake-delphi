@@ -15,7 +15,7 @@ module DelphiAndroidTests
       super
       @required_files << 'assets/internal/module.ext'
       @required_files << 'assets/internal/predefined.db'
-      @required_files << 'lib/mips/libTestProject.so'
+      @required_files << 'lib/mips/libTestProject.debug.so'
     end
   end
 
