@@ -38,6 +38,21 @@ protected
         PROJECT_EXE.pathmap('%n')
     end
 
+    def _test_deploy_files(deploymentfiles, tested_deploymentFiles)
+      assert deploymentfiles.kind_of?(Array), 'NOT an Array?!'
+      assert_not_equal 0, deploymentfiles.size, 'No files?!'
+
+      deploymentfiles.each do |dfile|
+        assert dfile.kind_of?(Hash), 'NOT a Hash?!'
+        assert_equal 1, dfile.keys.count, 'More than one value?!'
+        assert dfile.keys.first.kind_of?(String) || dfile.keys.first.kind_of?(Symbol), 'Key is NOT a String or Symbol?!'
+        assert dfile.values.first.kind_of?(Array), 'Value is NOT an Array?!'
+
+        dfile = dfile.to_a.join(',')
+        assert tested_deploymentFiles.include?(dfile), dfile
+      end
+    end
+
 public
     def setup
         @saved_delphi_version = Rake::Delphi::EnvVariables.delphi_version.to_s

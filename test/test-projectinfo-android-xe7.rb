@@ -70,30 +70,16 @@ module DelphiAndroidTests
       tested_deploymentFiles << '$(BDS)\lib\android\debug\mips\libnative-activity.so,library\lib\mips\,1,libTestProject.so'
       tested_deploymentFiles << '$(BDS)\lib\android\debug\armeabi\libnative-activity.so,library\lib\armeabi\,1,libTestProject.so'
       deploymentfiles = @info.deploymentfiles('Android', 'Debug')
-      assert deploymentfiles.kind_of?(Array), 'NOT an Array?!'
-      assert_not_equal 0, deploymentfiles.size, 'No files?!'
-      deploymentfiles.each do |dfile|
-        assert dfile.kind_of?(Hash), 'NOT a Hash?!'
-        assert_equal 1, dfile.keys.count, 'More than one value?!'
-        assert dfile.keys.first.kind_of?(String) || dfile.keys.first.kind_of?(Symbol), 'Key is NOT a String or Symbol?!'
-        assert dfile.values.first.kind_of?(Array), 'Value is NOT an Array?!'
-        assert tested_deploymentFiles.include?(dfile.to_a.join(',')), dfile.to_a.join(',')
-      end
+
+      _test_deploy_files(deploymentfiles, tested_deploymentFiles)
     end
 
     def test_deploy_files_Android_Release
       tested_deploymentFiles = []
       tested_deploymentFiles << 'some\deployment\file\from\enabled.release.conf,.\,1,enabled.release.conf.file'
       deploymentfiles = @info.deploymentfiles('Android', 'Release')
-      assert deploymentfiles.kind_of?(Array), 'NOT an Array?!'
-      assert_not_equal 0, deploymentfiles.size, 'No files?!'
-      deploymentfiles.each do |dfile|
-        assert dfile.kind_of?(Hash), 'NOT a Hash?!'
-        assert_equal 1, dfile.keys.count, 'More than one value?!'
-        assert dfile.keys.first.kind_of?(String) || dfile.keys.first.kind_of?(Symbol), 'Key is NOT a String or Symbol?!'
-        assert dfile.values.first.kind_of?(Array), 'Value is NOT an Array?!'
-        assert tested_deploymentFiles.include?(dfile.to_a.join(',')), dfile.to_a.join(',')
-      end
+
+      _test_deploy_files(deploymentfiles, tested_deploymentFiles)
     end
   end
 
