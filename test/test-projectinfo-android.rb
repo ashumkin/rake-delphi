@@ -64,7 +64,7 @@ module DelphiAndroidTests
         tested_deploymentFiles << '$(BDS)\bin\Artwork\Android\FM_LauncherIcon_%dx%d.png,res\drawable-%sdpi\,1,ic_launcher.png' % [n, n, tested_deploymentFiles_prefixes[n]]
       end
       tested_deploymentFiles << 'project_so,library\lib\armeabi\,1,libTestProject.so'
-      tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.dex'
+      tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.debug.dex'
       deploymentfiles = @info.deploymentfiles('Android', 'Debug')
 
       _test_deploy_files(deploymentfiles, tested_deploymentFiles)
@@ -73,6 +73,8 @@ module DelphiAndroidTests
     def test_deploy_files_Android_Release
       tested_deploymentFiles = []
       tested_deploymentFiles << 'some\deployment\file\from\enabled.release.conf,.\,1,enabled.release.conf.file'
+      # classes.dex must present both in Release and Debug configurations
+      tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.release.dex'
       deploymentfiles = @info.deploymentfiles('Android', 'Release')
 
       _test_deploy_files(deploymentfiles, tested_deploymentFiles)

@@ -112,6 +112,15 @@ module Rake
             # update Platform
             node['Platform'] = plat
             node.delete('Platform') if plat.empty?
+            configuration = node['Configuration']
+            # for DeployFile's
+            if configuration
+              configuration = configuration.to_s.downcase.to_sym
+              node.delete('Configuration')
+              hash_node = hash[value]
+              node = { configuration => node }
+              node = hash_node.merge(node) if hash_node
+            end
             hash.merge!({ value => node })
           end
         end
@@ -149,8 +158,10 @@ module Rake
       def make_deployment(files, classes, configuration)
         r = []
         Logger.trace(Logger::TRACE, "Gathering deployment files for '#{configuration}'")
+        configuration = configuration.to_s.downcase.to_sym
         files.each do |file, value|
-          next if value['Configuration'].to_s.casecmp(configuration.to_s) != 0
+          value = value[configuration]
+          next unless value
           value_class = value['Class']
           _class = classes[value_class]
           if ['AndroidGDBServer', 'ProjectAndroidManifest'].include?(value_class)

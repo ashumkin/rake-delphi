@@ -253,9 +253,17 @@
             </Delphi.Personality>
             <Deployment>
                 <DeployFile LocalName="Deploy file with no platform" Configuration="Debug" Class="ClassDeployFileWithNoPlatform"/>
+                <!-- libnative-activity.so in Debug configuration -->
                 <DeployFile LocalName="e:\absent path\lib\android\debug\mips\libnative-activity.so" Configuration="Debug" Class="AndroidLibnativeMipsFile">
                     <Platform Name="Android">
-                        <RemoteName>libTestProject.so</RemoteName>
+                        <RemoteName>libTestProject.debug.so</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <!-- and in Release configuration -->
+                <DeployFile LocalName="e:\absent path\lib\android\debug\mips\libnative-activity.so" Configuration="Release" Class="AndroidLibnativeMipsFile">
+                    <Platform Name="Android">
+                        <RemoteName>libTestProject.release.so</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

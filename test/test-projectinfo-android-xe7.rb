@@ -67,7 +67,7 @@ module DelphiAndroidTests
       tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.dex'
       tested_deploymentFiles << 'external\module.ext,.\assets\internal\\\\,1,'
       tested_deploymentFiles << 'external\predefined.db,.\assets\internal\\\\,1,'
-      tested_deploymentFiles << '$(BDS)\lib\android\debug\mips\libnative-activity.so,library\lib\mips\,1,libTestProject.so'
+      tested_deploymentFiles << '$(BDS)\lib\android\debug\mips\libnative-activity.so,library\lib\mips\,1,libTestProject.debug.so'
       tested_deploymentFiles << '$(BDS)\lib\android\debug\armeabi\libnative-activity.so,library\lib\armeabi\,1,libTestProject.so'
       deploymentfiles = @info.deploymentfiles('Android', 'Debug')
 
@@ -76,6 +76,8 @@ module DelphiAndroidTests
 
     def test_deploy_files_Android_Release
       tested_deploymentFiles = []
+      # libnative-activity.so must present both in Release and Debug configurations
+      tested_deploymentFiles << '$(BDS)\lib\android\debug\mips\libnative-activity.so,library\lib\mips\,1,libTestProject.release.so'
       tested_deploymentFiles << 'some\deployment\file\from\enabled.release.conf,.\,1,enabled.release.conf.file'
       deploymentfiles = @info.deploymentfiles('Android', 'Release')
 

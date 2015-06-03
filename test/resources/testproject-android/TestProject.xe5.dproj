@@ -281,9 +281,16 @@
                         <RemoteName>ic_launcher.png</RemoteName>
                     </Platform>
                 </DeployFile>
+                <!-- classes.dex in Debug configuration -->
                 <DeployFile LocalName="c:\program files (x86)\embarcadero\rad studio\12.0\lib\android\debug\classes.dex" Configuration="Debug" Class="AndroidClassesDexFile">
                     <Platform Name="Android">
-                        <RemoteName>classes.dex</RemoteName>
+                        <RemoteName>classes.debug.dex</RemoteName>
+                    </Platform>
+                </DeployFile>
+                <!-- and in Release configuration -->
+                <DeployFile LocalName="c:\program files (x86)\embarcadero\rad studio\12.0\lib\android\debug\classes.dex" Configuration="Release" Class="AndroidClassesDexFile">
+                    <Platform Name="Android">
+                        <RemoteName>classes.release.dex</RemoteName>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_48x48.png" Configuration="Debug" Class="Android_LauncherIcon48">

@@ -42,6 +42,7 @@ protected
       assert deploymentfiles.kind_of?(Array), 'NOT an Array?!'
       assert_not_equal 0, deploymentfiles.size, 'No files?!'
 
+      dfiles = []
       deploymentfiles.each do |dfile|
         assert dfile.kind_of?(Hash), 'NOT a Hash?!'
         assert_equal 1, dfile.keys.count, 'More than one value?!'
@@ -50,6 +51,11 @@ protected
 
         dfile = dfile.to_a.join(',')
         assert tested_deploymentFiles.include?(dfile), dfile
+
+        dfiles << dfile
+      end
+      tested_deploymentFiles.each do |tfile|
+        assert dfiles.include?(tfile), "No #{tfile} in deployment files?!"
       end
     end
 
