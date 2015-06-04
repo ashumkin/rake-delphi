@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/helpers/gemversion'
 
-class TestVersionImproved <  Test::Unit::TestCase
+class TestVersionImproved < MiniTest::Unit::TestCase
 public
     def setup
     end

@@ -2,7 +2,6 @@
 # vim: set shiftwidth=2 tabstop=2 expandtab:
 
 require 'rake'
-require 'test/unit'
 require 'rake/delphi'
 require 'rake/delphi/projectinfo'
 require 'rake/delphi/dcc32'

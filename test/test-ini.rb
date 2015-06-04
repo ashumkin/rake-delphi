@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/common/initask'
 require 'rake/helpers/unittest'
 
-class TestIniProperty <  Test::Unit::TestCase
+class TestIniProperty < MiniTest::Unit::TestCase
 private
     def _file
         return @file ||= File.expand_path('../resources/ini/file.ini', __FILE__)

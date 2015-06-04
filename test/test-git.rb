@@ -1,13 +1,13 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'fileutils'
 require 'rake/common/chdirtask'
 require 'rake/common/git'
 require 'rake/helpers/unittest'
 
-class CustomTestGit <  Test::Unit::TestCase
+class CustomTestGit < MiniTest::Unit::TestCase
 private
     def init_test_dit_dir
         @test_git_dir = File.expand_path('../tmp', __FILE__)
@@ -126,7 +126,7 @@ public
 
     def test_changelog_processed_not_a_hash_string
         @opts.merge!({ :process => 'added'})
-        assert_raise RuntimeError do
+        assert_raises RuntimeError do
             Rake::Delphi::ChDir.new(@rake_task, @test_git_dir) do
                 chlog = Rake::Delphi::GitChangelog.new(@rake_task, @opts)
             end
@@ -135,7 +135,7 @@ public
 
     def test_changelog_processed_not_a_hash_array
         @opts.merge!({ :process => [['added']] })
-        assert_raise RuntimeError do
+        assert_raises RuntimeError do
             Rake::Delphi::ChDir.new(@rake_task, @test_git_dir) do
                 chlog = Rake::Delphi::GitChangelog.new(@rake_task, @opts)
             end

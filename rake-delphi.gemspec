@@ -32,10 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rake", "~> 10.0.4"
   spec.add_runtime_dependency "xml-simple"
   spec.add_runtime_dependency "inifile"
-  # Ruby 2.2 have no `test-unit` gem in stdlib
-  if (Gem::Version.new(RUBY_VERSION) <=> Gem::Version.new('2.2')) >= 0
-    spec.add_development_dependency "test-unit"
-  end
   spec.add_development_dependency "minitest", "~> 4.3"
   spec.add_development_dependency "rubyzip", "~> 0.9.9"
   spec.add_development_dependency "apktools"

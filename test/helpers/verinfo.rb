@@ -1,5 +1,5 @@
 require 'fileutils'
-require 'test/unit'
+require 'minitest/autorun'
 require 'helpers/consts'
 require 'rake/delphi/envvariables'
 
@@ -16,7 +16,7 @@ end
 
 module DelphiTests
 
-class TestVerInfo < Test::Unit::TestCase
+class TestVerInfo < MiniTest::Unit::TestCase
     DPROJ_VERSIONS = { '10' => '2006.bdsproj', '11' => '2007.dproj', \
                        '13' => '2010.dproj', '18' => 'xe5.dproj',
                        '21' => 'xe7.dproj' }
@@ -40,7 +40,7 @@ protected
 
     def _test_deploy_files(deploymentfiles, tested_deploymentFiles)
       assert deploymentfiles.kind_of?(Array), 'NOT an Array?!'
-      assert_not_equal 0, deploymentfiles.size, 'No files?!'
+      refute_equal 0, deploymentfiles.size, 'No files?!'
 
       dfiles = []
       deploymentfiles.each do |dfile|

@@ -2,7 +2,6 @@
 
 require 'rake'
 require 'fileutils'
-require 'test/unit'
 require 'rake/delphi'
 require 'rake/delphi/project'
 require 'rake/delphi/tool'
@@ -164,17 +163,15 @@ public
     end
 end
 
-class TestCustomDelphiTool <  Test::Unit::TestCase
+class TestCustomDelphiTool < MiniTest::Unit::TestCase
 private
 public
     def test_checkToolFailure
-        assert_nothing_raised RuntimeError do
-            Rake::Delphi::CustomDelphiTool.checkToolFailure(__FILE__)
-        end
+        Rake::Delphi::CustomDelphiTool.checkToolFailure(__FILE__)
     end
 
     def test_checkToolFailure_failure
-        assert_raise RuntimeError do
+        assert_raises RuntimeError do
             Rake::Delphi::CustomDelphiTool.checkToolFailure(__FILE__ + '.ext')
         end
     end
@@ -192,7 +189,7 @@ end
 
 end
 
-class TestRCResourceCompiler < Test::Unit::TestCase
+class TestRCResourceCompiler < MiniTest::Unit::TestCase
 private
 public
     def setup

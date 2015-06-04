@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/helpers/unittest'
 require 'rake/helpers/string'
 
-class TestString < Test::Unit::TestCase
+class TestString < MiniTest::Unit::TestCase
     def test_prepend
         assert_equal('prefix_a', 'a'.prepend('prefix_'))
     end

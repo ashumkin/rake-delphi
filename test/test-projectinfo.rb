@@ -1,7 +1,6 @@
 # encoding: Windows-1251
 
 require 'rake'
-require 'test/unit'
 require 'rake/delphi'
 require 'rake/delphi/projectinfo'
 require 'rake/delphi/dcc32'

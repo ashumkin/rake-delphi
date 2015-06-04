@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/common/libstask'
 require 'rake/helpers/unittest'
 
-class TestLibsTask <  Test::Unit::TestCase
+class TestLibsTask < MiniTest::Unit::TestCase
 private
     def _dir
         return @dir ||= File.expand_path('../resources/libstask/', __FILE__)
@@ -27,9 +27,9 @@ public
             assert_equal('test-libs-task-test_define', task2.name)
         end
         # already invoked
-        assert_not_equal(nil, task2.libs)
+        refute_equal(nil, task2.libs)
         # not empty
-        assert_not_equal([], task2.libs)
+        refute_equal([], task2.libs)
     end
 
     def test_libs_relative_not_executed

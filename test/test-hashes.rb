@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/common/hashtask'
 require 'rake/helpers/unittest'
 
-class CustomTestHashTask <  Test::Unit::TestCase
+class CustomTestHashTask < MiniTest::Unit::TestCase
 private
     def _file
         return @file ||= File.expand_path('../resources/hashes/hash.file', __FILE__)

@@ -3,7 +3,6 @@
 
 require 'rake'
 require 'fileutils'
-require 'test/unit'
 require 'rake/delphi/dccaarmtool'
 require 'rake/delphi/envvariables'
 require 'rake/helpers/unittest'

@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/common/ziptask'
 require 'rake/helpers/unittest'
 
-class TestZipTask <  Test::Unit::TestCase
+class TestZipTask <  MiniTest::Unit::TestCase
 private
 public
     def setup
@@ -15,14 +15,14 @@ public
     end
 
     def test_zip_no_filename
-        assert_raise RuntimeError do
+        assert_raises RuntimeError do
             # second argument must be non-empty
             Rake::Delphi::ZipTask.new(@rake_task, nil, nil)
         end
     end
 
     def test_zip_empty_filename
-        assert_raise RuntimeError do
+        assert_raises RuntimeError do
             # second argument must be non-empty
             Rake::Delphi::ZipTask.new(@rake_task, '', nil)
         end

@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/delphi/envvariables'
 require 'rake/helpers/unittest'
 
-class TestEnvVariables < Test::Unit::TestCase
+class TestEnvVariables < MiniTest::Unit::TestCase
 
     def setup
         ENV['BDS_PLATFORM'] = 'BDS platform'
@@ -23,7 +23,7 @@ class TestEnvVariables < Test::Unit::TestCase
 
         env_vars['BDS_PLATFORM_CASE_2'] = 'BDS Platform Case 2'
         # be sure there is no BDS_Platform_Case_2 defined
-        assert_not_equal('BDS Platform Case 2', env_vars['BDS_Platform_Case_2'])
+        refute_equal('BDS Platform Case 2', env_vars['BDS_Platform_Case_2'])
         # also freeze string (ENV vars are frozen strings)
         assert_equal('Platform: BDS Platform Case 2', env_vars.expand('Platform: $(BDS_Platform_Case_2)'.freeze))
     end

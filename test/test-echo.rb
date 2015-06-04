@@ -1,11 +1,11 @@
 # encoding: utf-8
 
 require 'rake'
-require 'test/unit'
+require 'minitest/autorun'
 require 'rake/common/echotask'
 require 'rake/helpers/unittest'
 
-class TestEchoToFileTask <  Test::Unit::TestCase
+class TestEchoToFileTask < MiniTest::Unit::TestCase
 private
     def file_in
         return @file_in ||= File.expand_path('../resources/echo/file.in', __FILE__)
