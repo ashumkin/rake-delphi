@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 require 'rake/delphi/dcc32tool'
+require 'rake/delphi/android/sdk'
 
 module Rake
   module Delphi
@@ -11,19 +12,8 @@ module Rake
       end
 
       def options
-        opts = []
-        linker_path = ENV['DELPHI_ANDROID_SDK_LINKER']
-        warn "Please, define DELPHI_ANDROID_SDK_LINKER environment variable.\n Otherwise you may get 'File not found: ldandroid.exe' error" unless linker_path
-        lib_path = ENV['DELPHI_ANDROID_SDK_LIBPATH']
-        warn 'Please, define DELPHI_ANDROID_SDK_LIBPATH environment variable' unless lib_path
-        linker_option = ENV['DELPHI_ANDROID_SDK_LINKER_OPTION']
-        warn 'Please, define DELPHI_ANDROID_SDK_LINKER_OPTION environment variable' unless linker_option
-        opts << '-TX.so'
-        opts << "--linker:\"#{linker_path}\""
-        opts << "--libpath:\"#{lib_path}\""
-        opts << "--linker-option:\"#{linker_option}\""
-        return opts
+        return Android::DCC32SDKOptions.new.dcc32options
       end
-    end
-  end
-end
+    end # class DccARMTool
+  end # module Delphi
+end # moddule Rake

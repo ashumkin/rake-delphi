@@ -19,13 +19,13 @@ module Rake
         EmbarcaderoRegRoot = 'SOFTWARE\\Embarcadero\\BDS'
 
         def self.reinit
-            @@version, @@delphidir, @@toolpath = nil, nil, nil
+            @@version, @@delphidir, @@toolpath, @@regroot = nil, nil, nil, nil
         end
 
         reinit
 
         def initialize(checkExistance = false)
-            @@version, @@delphidir, @@toolpath = self.class.find(checkExistance) unless @@version
+            @@version, @@delphidir, @@toolpath, @@regroot = self.class.find(checkExistance) unless @@version
         end
 
         def self.toolName
@@ -42,6 +42,10 @@ module Rake
 
         def delphidir
           @@delphidir
+        end
+
+        def regroot
+          @@regroot
         end
 
         def options
@@ -114,18 +118,19 @@ module Rake
                         ::Win32::Registry::HKEY_CURRENT_USER].each do |regRoot|
                     begin
                         Logger.trace(Logger::DEBUG, "Finding Delphi dir for #{ver}")
-                        regRoot.open(rootForVersion(ver)) do |reg|
+                        reg_root = rootForVersion(ver)
+                        regRoot.open(reg_root) do |reg|
                             reg_typ, reg_val = reg.read('RootDir')
-                            return reg_val.unix2dos_separator
+                            return reg_val.unix2dos_separator, reg_root
                         end
                     rescue ::Win32::Registry::Error
                         Logger.trace(Logger::DEBUG, "No reg key '#{regRoot}'?!")
                     end
                 end
-                return nil
+                return nil, nil
             rescue LoadError
                 Logger.trace(Logger::DEBUG, 'No `win32/registry` gem?!')
-                return nil
+                return nil, nil
             end
         end
 
@@ -137,7 +142,7 @@ module Rake
                 ENV['DELPHI_DIR'] = ENV['DELPHI_DIR'].gsub(/[^\/]$/, '\&/')
                 tool = ENV['DELPHI_DIR'] + toolName
                 checkToolFailure(tool) if failIfNotFound
-                return v, ENV['DELPHI_DIR'], tool
+                return v, ENV['DELPHI_DIR'], tool, ENV['DELPHI_REG_ROOT']
             end
             if v.to_s.empty?
                 v = []
@@ -149,7 +154,7 @@ module Rake
             end
             tool_was_found = false
             v.each do |ver|
-                path = readDelphiDir(ver)
+                path, regroot = readDelphiDir(ver)
                 next unless path
                 tool = path + toolName
                 tool_was_found = true
@@ -157,8 +162,9 @@ module Rake
                 if File.exists?(tool) # found it !
                     ENV['DELPHI_VERSION'] = ver
                     ENV['DELPHI_DIR'] = path
-                    Logger.trace(Logger::DEBUG, "Set: DELPHI_VERSION=#{ver}; DELPHI_DIR='#{path}'")
-                    return ver, path, tool
+                    ENV['DELPHI_REG_ROOT'] = regroot
+                    Logger.trace(Logger::DEBUG, "Set: DELPHI_VERSION=#{ver}; DELPHI_DIR='#{path}'; DELPHI_REG_ROOT='#{regroot}'")
+                    return ver, path, tool, regroot
                 else
                     Logger.trace(Logger::DEBUG, 'But file does not exist!')
                 end

@@ -10,6 +10,7 @@ require 'rake/helpers/string'
 require 'rake/common/chdirtask'
 require 'rake/delphi/paclienttool'
 require 'rake/delphi/android/manifest'
+require 'rake/delphi/android/sdk'
 
 module Rake
   module Delphi
@@ -118,9 +119,7 @@ module Rake
       end
 
       def get_stripdebug_arg(paclientTool)
-        stripdebug_path = ENV['DELPHI_ANDROID_SDK_STRIPDEBUG']
-        warn 'Please, set DELPHI_ANDROID_SDK_STRIPDEBUG to path where arm-linux-androideabi-strip.exe is located' unless stripdebug_path
-        stripdebug_path = Rake.quotepath('', stripdebug_path.to_s)
+        stripdebug_path = Android::PAClientSDKOptions.new.stripdebug
         output_dest = find_project_so(@deploymentfiles).dup
         output = @dccTask.exeoutput + '\\' + output_dest.last
         # remove '1' string
@@ -148,10 +147,8 @@ module Rake
       def get_aaptpackage_arg(paclientTool)
         output = @dccTask.exeoutput
         output_platform = File.expand_path2(output, '-u')
-        apt_path = ENV['DELPHI_ANDROID_SDK_BUILD_TOOLS_PATH']
-        warn 'Please, set DELPHI_ANDROID_SDK_BUILD_TOOLS_PATH to path where aapt.exe is located' unless apt_path
-        apt_path = apt_path.to_s + '\\aapt.exe'
-        apt_path  = Rake.quotepath('', apt_path)
+        paclient_options = Android::PAClientSDKOptions.new
+        apt_path = paclient_options.aapt
         args = [apt_path.double_delimiters]
         args += aapt_args.map do |a|
            to_mkdir = false
@@ -159,10 +156,7 @@ module Rake
            if a == :output
              a = unsigned_path
            elsif a == :jar
-             platform = ENV['DELPHI_ANDROID_SDK_PLATFORM_PATH']
-             warn 'Please, set DELPHI_ANDROID_SDK_PLATFORM_PATH to the path where android.jar is located' unless platform
-             a = platform.to_s + '\\android.jar'
-             a = Rake.quotepath('', a)
+             a = paclient_options.jar
              out = false
            else
              if a.kind_of?(Symbol)
@@ -188,24 +182,19 @@ module Rake
       end
 
       def get_jarsign_arg(paclientTool)
-        jdk_path = ENV['JAVA_SDK_PATH']
-        warn 'Please, set JAVA_SDK_PATH to the path where jarsigner.exe is located' unless jdk_path
-        args = [Rake.quotepath('', jdk_path.to_s + '\\jarsigner.exe')]
+        args = []
+        java_sdk = Android::JavaSDK.new
+        args << java_sdk.jarsigner
         args << unsigned_path(true).double_delimiters
-        key_store = ENV['DELPHI_ANDROID_KEYSTORE']
-        warn 'Please, set DELPHI_ANDROID_KEYSTORE to the path where keystore (to sign application) located' unless key_store
-        key_store = Rake.quotepath('', key_store.double_delimiters)
-        key_store_params = ENV['DELPHI_ANDROID_KEYSTORE_PARAMS']
-        warn 'Please, set DELPHI_ANDROID_KEYSTORE_PARAMS to alias,method,keystore_password,key_password' unless key_store_params
-        key_alias, key_params = key_store_params.split(',', 2)
+        key_store = java_sdk.keystore
+        key_alias, key_params = java_sdk.keystore_params
         args << key_alias << key_store << key_params
         return args.join(',')
       end
 
       def get_zipalign_arg(paclientTool)
-        zip_align = ENV['DELPHI_ANDROID_SDK_PLATFORM_TOOLS']
-        warn 'Please, set DELPHI_ANDROID_SDK_PLATFORM_TOOLS to the path where zipalign.exe is located' unless zip_align
-        args = [Rake.quotepath('', zip_align.to_s + '\\zipalign.exe')]
+        args = []
+        args << Android::PAClientSDKOptions.new.zipalign
         args << unsigned_path(true).double_delimiters
         zip_aligned_out = @dccTask.exeoutput + '\\' + @suffix + '\\' + @dccTask.dpr.pathmap('%n.apk')
         zip_aligned_out_platform = File.expand_path2(zip_aligned_out, '-u')
