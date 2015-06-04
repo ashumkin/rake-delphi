@@ -31,6 +31,7 @@ namespace :test do
     task :prepare, :useresources, :options do |t, opts|
         _task = Rake::Task['test:compile']
         dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.name + ':delphi').to_sym)
+        dpr[:quiet] = true
         dpr[:resources_additional] = []
         dpr[:resources_additional] << 'resources' if opts[:useresources]
         dpr[:resources_additional] << 'resources_ext:extended_resources.dres' if opts[:useresources] === 'ext'

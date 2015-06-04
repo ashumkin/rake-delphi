@@ -29,6 +29,7 @@ module TestAndroidModule
       fail 'Cannot compile this project with Delphi below XE5' if Rake::Delphi::EnvVariables.delphi_version < Rake::Delphi::DELPHI_VERSION_XE5
       _task = Rake::Task['test_android:compile']
       dpr = Rake.application.define_task(Rake::Delphi::Project, (_task.name + ':delphi').to_sym)
+      dpr[:quiet] = true
       dpr[:resources_additional] = 'resources' if opts[:useresources]
       dpr[:platform_configuration] = 'Debug'
       dpr[:platform] = 'Android32'
