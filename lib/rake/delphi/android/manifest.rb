@@ -8,7 +8,8 @@ require 'rake/common/chdirtask'
 
 module Rake
   module Delphi
-    class AndroidManifestInfo
+  module Android
+    class ManifestInfo
       attr_accessor :version
 
       def initialize(owner)
@@ -26,9 +27,9 @@ module Rake
       def libname
         @owner.dccTask.dpr.pathmap('%n')
       end
-    end
+    end # class ManifestInfo
 
-    class AndroidManifestTask < Rake::Task
+    class ManifestTask < Rake::Task
       attr_reader :output, :dccTask
     public
       def initialize(name, application)
@@ -36,7 +37,7 @@ module Rake
         self.needed = false
         @template = 'AndroidManifest.erb'
         @output = 'AndroidManifest.xml'
-        @template_obj = AndroidManifestInfo.new(self)
+        @template_obj = ManifestInfo.new(self)
       end
 
       def execute(args = nil)
@@ -56,6 +57,7 @@ module Rake
           end
         end
       end
-    end # class AndroidManifestTask
-  end
-end
+    end # class ManifestTask
+  end # module Android
+  end # module Delphi
+end # module Rake

@@ -9,7 +9,7 @@ require 'rake/helpers/raketask'
 require 'rake/helpers/string'
 require 'rake/common/chdirtask'
 require 'rake/delphi/paclienttool'
-require 'rake/delphi/androidmanifest'
+require 'rake/delphi/android/manifest'
 
 module Rake
   module Delphi
@@ -24,7 +24,7 @@ module Rake
         super
         @last_put_arg_index = 0
         @suffix = 'AndroidPackage'
-        @manifest = application.define_task(AndroidManifestTask, shortname + ':manifest')
+        @manifest = application.define_task(Android::ManifestTask, shortname + ':manifest')
         enhance([@manifest])
         self.needed = false
         dccTaskName = name.gsub(/:post$/, '')
