@@ -93,49 +93,49 @@ module Rake
         end
 
         def linker
-          @linker ||= ENV['DELPHI_ANDROID_SDK_LINKER']
+          @linker = ENV['DELPHI_ANDROID_SDK_LINKER'] || @linker
           warn "Please, define DELPHI_ANDROID_SDK_LINKER environment variable.\n Otherwise you may get 'File not found: ldandroid.exe' error" unless @linker
           @linker
         end
 
         def lib
-          @lib ||= ENV['DELPHI_ANDROID_SDK_LIBPATH']
+          @lib = ENV['DELPHI_ANDROID_SDK_LIBPATH'] || @lib
           warn 'Please, define DELPHI_ANDROID_SDK_LIBPATH environment variable' unless @lib
           @lib
         end
 
         def linker_option
-          @linker_option ||= ENV['DELPHI_ANDROID_SDK_LINKER_OPTION']
+          @linker_option = ENV['DELPHI_ANDROID_SDK_LINKER_OPTION'] || @linker_option
           warn 'Please, define DELPHI_ANDROID_SDK_LINKER_OPTION environment variable' unless @linker_option
           @linker_option
         end
 
         def stripdebug
-          @stripdebug ||= ENV['DELPHI_ANDROID_SDK_STRIPDEBUG']
+          @stripdebug = ENV['DELPHI_ANDROID_SDK_STRIPDEBUG'] || @stripdebug
           warn 'Please, set DELPHI_ANDROID_SDK_STRIPDEBUG to path where arm-linux-androideabi-strip.exe is located' unless @stripdebug
           @stripdebug
         end
 
         def aapt
-          @aapt ||= ENV['DELPHI_ANDROID_SDK_BUILD_TOOLS_PATH']
+          @aapt = ENV['DELPHI_ANDROID_SDK_BUILD_TOOLS_PATH'] || @aapt
           warn 'Please, set DELPHI_ANDROID_SDK_BUILD_TOOLS_PATH to path where aapt.exe is located' unless @aapt
           @aapt
         end
 
         def platform
-          @platform ||= ENV['DELPHI_ANDROID_SDK_PLATFORM_PATH']
+          @platform = ENV['DELPHI_ANDROID_SDK_PLATFORM_PATH'] || @platform
           warn 'Please, set DELPHI_ANDROID_SDK_PLATFORM_PATH to the path where android.jar is located' unless @platform
           @platform
         end
 
         def keystore
-          @keystore ||= ENV['DELPHI_ANDROID_KEYSTORE']
+          @keystore = ENV['DELPHI_ANDROID_KEYSTORE'] || @keystore
           warn 'Please, set DELPHI_ANDROID_KEYSTORE to the path where keystore (to sign application) located' unless @keystore
           @keystore
         end
 
         def zipalign
-          @zipalign ||= ENV['DELPHI_ANDROID_SDK_PLATFORM_TOOLS']
+          @zipalign = ENV['DELPHI_ANDROID_SDK_PLATFORM_TOOLS'] || @zipalign
           warn 'Please, set DELPHI_ANDROID_SDK_PLATFORM_TOOLS to the path where zipalign.exe is located' unless @zipalign
           @zipalign
         end
@@ -178,7 +178,7 @@ module Rake
 
       class JavaSDK < SDK
         def path
-          @jdk_path ||= ENV['JAVA_SDK_PATH']
+          @jdk_path = ENV['JAVA_SDK_PATH'] || @jdk_path
           warn 'Please, set JAVA_SDK_PATH to the path where jarsigner.exe is located' unless @jdk_path
           @jdk_path
         end
