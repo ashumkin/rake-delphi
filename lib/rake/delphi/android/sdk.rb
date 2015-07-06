@@ -19,9 +19,6 @@ module Rake
           :zipalign => 'SDKZipAlignPath',
           :jdk_path => 'JDKJarsignerPath'
         }
-        REG_KEYS = {::Win32::Registry::HKEY_CURRENT_USER => 'HKCU',
-          ::Win32::Registry::HKEY_LOCAL_MACHINE => 'HKLM'}
-
         PROPERTIES.keys.each do |prop|
           attr_accessor prop
         end
@@ -34,11 +31,14 @@ module Rake
         def read_default_config
           begin
             require 'win32/registry'
+            @reg_keys = {::Win32::Registry::HKEY_CURRENT_USER => 'HKCU',
+              ::Win32::Registry::HKEY_LOCAL_MACHINE => 'HKLM'}
+
             [::Win32::Registry::HKEY_CURRENT_USER, \
                 ::Win32::Registry::HKEY_LOCAL_MACHINE].each do |regRoot|
               begin
                 key = 'Default_Android'
-                Logger.trace(Logger::DEBUG, "Finding #{REG_KEYS[regRoot]}\\#{@platform_SDKs}\\#{key}")
+                Logger.trace(Logger::DEBUG, "Finding #{@reg_keys[regRoot]}\\#{@platform_SDKs}\\#{key}")
                 regRoot.open(@platform_SDKs) do |reg|
                     reg_typ, reg_val = reg.read(key)
                   Logger.trace(Logger::DEBUG, "Found '#{reg_val}'")
@@ -67,7 +67,7 @@ module Rake
               [::Win32::Registry::HKEY_CURRENT_USER, \
                  ::Win32::Registry::HKEY_LOCAL_MACHINE].each do |regRoot|
                 begin
-                  Logger.trace(Logger::DEBUG, "Finding '#{reg_key}' for '#{prop}' in '#{REG_KEYS[regRoot]}\\#{reg_default}'")
+                  Logger.trace(Logger::DEBUG, "Finding '#{reg_key}' for '#{prop}' in '#{@reg_keys[regRoot]}\\#{reg_default}'")
                   regRoot.open(reg_default) do |reg|
                     reg_typ, reg_val = reg.read(reg_key)
                     Logger.trace(Logger::DEBUG, "Value=#{reg_val}")
