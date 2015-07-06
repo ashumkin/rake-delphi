@@ -306,17 +306,17 @@
                         <RemoteName>ic_launcher.png</RemoteName>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="some\deployment\file\with\operation=0\class" Configuration="Debug" Class="File">
+                <DeployFile LocalName="resources\some-deployment-file-with-operation-eq-0-class" Configuration="Debug" Class="File">
                     <Platform Name="Android">
                         <RemoteName>release.conf</RemoteName>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="some\disabled\deployment\file\from\disabled.release.conf" Configuration="Release" Class="FileOperation0">
+                <DeployFile LocalName="resources\some-disabled-deployment-file-from-disabled.release.conf" Configuration="Release" Class="FileOperation0">
                     <Platform Name="Android">
                         <RemoteName>disabled.release.conf.file</RemoteName>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="some\deployment\file\from\enabled.release.conf" Configuration="Release" Class="FileOperation1">
+                <DeployFile LocalName="resources\some-deployment-file-from-enabled.release.conf" Configuration="Release" Class="FileOperation1">
                     <Platform Name="Android">
                         <RemoteName>enabled.release.conf.file</RemoteName>
                     </Platform>

@@ -64,6 +64,7 @@ module DelphiAndroidTests
       end
       tested_deploymentFiles << 'project_so,library\lib\armeabi\,1,libTestProject.so'
       tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.debug.dex'
+      tested_deploymentFiles << 'resources\some-deployment-file-with-operation-eq-0-class,.\,1,release.conf'
       deploymentfiles = @info.deploymentfiles('Android', 'Debug')
 
       _test_deploy_files(deploymentfiles, tested_deploymentFiles)
@@ -71,9 +72,11 @@ module DelphiAndroidTests
 
     def test_deploy_files_Android_Release
       tested_deploymentFiles = []
-      tested_deploymentFiles << 'some\deployment\file\from\enabled.release.conf,.\,1,enabled.release.conf.file'
+      tested_deploymentFiles << 'resources\some-deployment-file-from-enabled.release.conf,.\,1,enabled.release.conf.file'
       # classes.dex must present both in Release and Debug configurations
       tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.release.dex'
+      tested_deploymentFiles << 'resources\some-deployment-file-from-enabled.release.conf,.\,1,enabled.release.conf.file'
+      tested_deploymentFiles << 'resources\some-disabled-deployment-file-from-disabled.release.conf,.\,1,disabled.release.conf.file'
       deploymentfiles = @info.deploymentfiles('Android', 'Release')
 
       _test_deploy_files(deploymentfiles, tested_deploymentFiles)

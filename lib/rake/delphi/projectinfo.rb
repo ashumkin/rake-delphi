@@ -185,9 +185,6 @@ module Rake
             file = :project_so
           elsif value_class == 'ProjectFile'
             _class = value
-          elsif _class['Platform']['Operation'].to_i == 0
-            Logger.trace(Logger::TRACE, "Operation=0 for '#{value_class}'")
-            next
           else
             remote_dir = value['Platform']['RemoteDir'] if value['Platform']
           end
