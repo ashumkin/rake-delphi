@@ -61,7 +61,6 @@ module Rake
           return unless default_android
           reg_default = @platform_SDKs + '\\' + default_android
           begin
-            require 'win32/registry'
             PROPERTIES.each do |prop, reg_key|
               next unless reg_key
               # current user values have precedence over local machine
