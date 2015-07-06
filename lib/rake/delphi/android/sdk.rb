@@ -19,6 +19,8 @@ module Rake
           :zipalign => 'SDKZipAlignPath',
           :jdk_path => 'JDKJarsignerPath'
         }
+        REG_KEYS = {::Win32::Registry::HKEY_CURRENT_USER => 'HKCU',
+          ::Win32::Registry::HKEY_LOCAL_MACHINE => 'HKLM'}
 
         PROPERTIES.keys.each do |prop|
           attr_accessor prop
@@ -32,12 +34,11 @@ module Rake
         def read_default_config
           begin
             require 'win32/registry'
-            [::Win32::Registry::HKEY_LOCAL_MACHINE, \
-                # for local/manual installations
-                ::Win32::Registry::HKEY_CURRENT_USER].each do |regRoot|
+            [::Win32::Registry::HKEY_CURRENT_USER, \
+                ::Win32::Registry::HKEY_LOCAL_MACHINE].each do |regRoot|
               begin
                 key = 'Default_Android'
-                Logger.trace(Logger::DEBUG, "Finding #{@platform_SDKs}\\#{key}")
+                Logger.trace(Logger::DEBUG, "Finding #{REG_KEYS[regRoot]}\\#{@platform_SDKs}\\#{key}")
                 regRoot.open(@platform_SDKs) do |reg|
                     reg_typ, reg_val = reg.read(key)
                   Logger.trace(Logger::DEBUG, "Found '#{reg_val}'")
@@ -63,16 +64,18 @@ module Rake
             require 'win32/registry'
             PROPERTIES.each do |prop, reg_key|
               next unless reg_key
-              [::Win32::Registry::HKEY_LOCAL_MACHINE, \
-                  # for local/manual installations
-                  ::Win32::Registry::HKEY_CURRENT_USER].each do |regRoot|
+              # current user values have precedence over local machine
+              [::Win32::Registry::HKEY_CURRENT_USER, \
+                 ::Win32::Registry::HKEY_LOCAL_MACHINE].each do |regRoot|
                 begin
-                  Logger.trace(Logger::DEBUG, "Finding '#{reg_key}' for '#{prop}' in '#{reg_default}'")
+                  Logger.trace(Logger::DEBUG, "Finding '#{reg_key}' for '#{prop}' in '#{REG_KEYS[regRoot]}\\#{reg_default}'")
                   regRoot.open(reg_default) do |reg|
                     reg_typ, reg_val = reg.read(reg_key)
-                  Logger.trace(Logger::DEBUG, "Value=#{reg_val}")
-                  send "#{prop}=", reg_val
-                end
+                    Logger.trace(Logger::DEBUG, "Value=#{reg_val}")
+                    send "#{prop}=", reg_val
+                  end
+                  # if value found (in CU) there is no reason to search in LM
+                  break
                 rescue ::Win32::Registry::Error
                   Logger.trace(Logger::DEBUG, "No reg key '#{regRoot}'?!")
                 end
