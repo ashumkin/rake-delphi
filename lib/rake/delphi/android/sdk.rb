@@ -130,7 +130,7 @@ module Rake
 
         def keystore
           @keystore = ENV['DELPHI_ANDROID_KEYSTORE'] || @keystore
-          warn 'Please, set DELPHI_ANDROID_KEYSTORE to the path where keystore (to sign application) located' unless @keystore
+          warn 'Please, set DELPHI_ANDROID_KEYSTORE to the path where a keystore (to sign an application) is located' unless @keystore
           @keystore
         end
 
