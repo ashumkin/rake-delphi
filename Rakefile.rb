@@ -15,7 +15,7 @@ end
 Rake::TestTask.new('test:no:delphi') do |t|
     t.ruby_opts << '-d' if Rake.application.options.trace
     t.libs << 'test'
-    t.test_files = FileList['test/test*'].delete_if do |f|
+    t.test_files = FileList['test/test*.rb'].delete_if do |f|
       # exclude "delphi" tests
       /delphi/.match(f)
     end
