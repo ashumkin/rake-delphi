@@ -115,7 +115,9 @@ module Rake
         deploymentfiles.each do |file|
           return file[:project_so] if file[:project_so]
         end
-        fail 'Cannot find :project_so in files'
+        fail 'Cannot find :project_so in files!
+Please check :platform_configuration property for the Dcc32Task!
+This error may occur if :platform_configuration is set to an incorrect value'
       end
 
       def get_stripdebug_arg(paclientTool)

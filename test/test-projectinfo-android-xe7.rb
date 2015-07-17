@@ -56,6 +56,24 @@ module DelphiAndroidTests
       assert_equal 'Test project comment', @info['Comments']
     end
 
+    def test_deploy_files_Android_implicit_debug_configuration
+      tested_deploymentFiles = []
+      tested_deploymentFiles_prefixes = { 36 => 'l', 48 => 'm', 72 => 'h', 96 => 'xh', 144 => 'xxh'}
+      [36, 48, 72, 96, 144].each do |n|
+        tested_deploymentFiles << '$(BDS)\bin\Artwork\Android\FM_LauncherIcon_%dx%d.png,res\drawable-%sdpi\,1,ic_launcher.png' % [n, n, tested_deploymentFiles_prefixes[n]]
+      end
+      tested_deploymentFiles << 'project_so,library\lib\armeabi\,1,libTestProject.so'
+      tested_deploymentFiles << '$(BDS)\lib\android\debug\classes.dex,classes\,1,classes.debug.dex'
+      tested_deploymentFiles << 'external\module.ext,.\assets\internal\\\\,1,'
+      tested_deploymentFiles << 'external\predefined.db,.\assets\internal\\\\,1,'
+      tested_deploymentFiles << '$(BDS)\lib\android\debug\mips\libnative-activity.so,library\lib\mips\,1,libTestProject.debug.so'
+      tested_deploymentFiles << '$(BDS)\lib\android\debug\armeabi\libnative-activity.so,library\lib\armeabi\,1,libTestProject.so'
+      tested_deploymentFiles << 'resources\some-deployment-file-with-operation-eq-0-class,.\,1,release.conf'
+      deploymentfiles = @info.deploymentfiles('Android', nil)
+
+      _test_deploy_files(deploymentfiles, tested_deploymentFiles)
+    end
+
     def test_deploy_files_Android_Debug
       tested_deploymentFiles = []
       tested_deploymentFiles_prefixes = { 36 => 'l', 48 => 'm', 72 => 'h', 96 => 'xh', 144 => 'xxh'}
@@ -83,6 +101,13 @@ module DelphiAndroidTests
       deploymentfiles = @info.deploymentfiles('Android', 'Release')
 
       _test_deploy_files(deploymentfiles, tested_deploymentFiles)
+    end
+
+    def test_deploy_files_Android_incorrect_configuration
+      tested_deploymentFiles = []
+      deploymentfiles = @info.deploymentfiles('Android', 'absent configuration')
+
+      assert_equal deploymentfiles, tested_deploymentFiles
     end
   end
 

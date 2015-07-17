@@ -157,8 +157,13 @@ module Rake
 
       def make_deployment(files, classes, configuration)
         r = []
+        configuration = configuration.to_s
+        if configuration.empty?
+          warn 'WARNING! Platform configuration is not set, \'Debug\' is assumed!'
+          configuration = 'Debug'
+        end
         Logger.trace(Logger::TRACE, "Gathering deployment files for '#{configuration}'")
-        configuration = configuration.to_s.downcase.to_sym
+        configuration = configuration.downcase.to_sym
         files.each do |file, value|
           value = value[configuration]
           unless value
@@ -193,6 +198,7 @@ module Rake
           remote_dir += '\\'
           r << { file => [remote_dir, '1', remote_name] }
         end
+        warn "WARNING! There are no files for the platform configuration '#{configuration}'!" if r.empty?
         return r
       end
 
