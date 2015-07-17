@@ -34,11 +34,7 @@ module Rake
         end
 
         def sendmail
-            if @task.application.unix?
-                "sendmail"
-            else
-                ENV['SENDMAIL']
-            end
+            ENV['SENDMAIL'] || 'sendmail'
         end
     end
   end
