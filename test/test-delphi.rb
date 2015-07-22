@@ -16,6 +16,9 @@ module DelphiTests
 class TestDelphi < TestVerInfo
 private
     def _test_prepare(prepare_args)
+        # -$D+ flag is the default for dcc32, so turn off debuginfo explicitly
+        # if it's not set
+        prepare_args[:debuginfo] = false if prepare_args[:debuginfo].nil? && ! prepare_args[:debug]
         args = [:altercfg, :usecfg, :defines, :debuginfo, :debug, :includepaths]
         # reinitialize arguments (even absent ones)
         args.each do |arg|
@@ -40,12 +43,16 @@ private
         prepare_task.invoke(useresources, prepare_args)
     end
 
-    def _test_compile_and_output(prepare_args, output)
+    def _test_compile_and_output(prepare_args, output, check_map_file = false)
         _test_prepare(prepare_args)
         # reenable tasks (!!! after invoking 'test:prepare')
         task = ::Rake::Task['test:compile']
         task.reenable_chain
         task.invoke
+
+        unless check_map_file.nil?
+            assert_equal check_map_file, File.exists?(map_file), 'File %s existance' % map_file
+        end
 
         assert(File.exists?(exe), 'File %s does not exist' % exe)
         out = `#{exe}`.chomp
@@ -56,13 +63,17 @@ private
         return PROJECT_EXE % name.gsub(/[():]/, '_')
     end
 
+    def map_file
+        exe.pathmap('%X.map')
+    end
+
 public
     def setup
         Rake::Delphi::Dcc32Tool.reinit
         ENV['DELPHI_DIR'] = nil
         super
         ENV['RAKE_DIR'] = PROJECT_PATH
-        [exe, PROJECT_PATH + '/resources.res', PROJECT_PATH + '/extended_resources.dres'].each do |file|
+        [exe, map_file, PROJECT_PATH + '/resources.res', PROJECT_PATH + '/extended_resources.dres'].each do |file|
             File.unlink(file) if File.exists?(file)
         end
         require PROJECT_PATH + '/Rakefile.rb'
@@ -85,9 +96,34 @@ public
             'DEBUG: testproject works')
     end
 
-    def test_compile_debug_info
+    def test_compile_debug_only_on
+        _test_compile_and_output({:debug => true},
+            'D+: testproject works', true)
+    end
+
+    def test_compile_debug_only_off
+        _test_compile_and_output({:debug => false},
+            'testproject works')
+    end
+
+    def test_compile_debuginfo_only_on
+        _test_compile_and_output({:debuginfo => true},
+            'D+: testproject works', false)
+    end
+
+    def test_compile_debuginfo_map
+        _test_compile_and_output({:debuginfo => true, :map => :detail},
+            'D+: testproject works', true)
+    end
+
+    def test_compile_debuginfo_only_off
+        _test_compile_and_output({:debuginfo => false},
+            'testproject works')
+    end
+
+    def test_compile_debug_debuginfo
         _test_compile_and_output({:debug => true, :debuginfo => true},
-            'D+: testproject works')
+            'D+: testproject works', true)
     end
 
     def test_compile_with_resources

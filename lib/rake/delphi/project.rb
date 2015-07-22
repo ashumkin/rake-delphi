@@ -50,7 +50,7 @@ module Rake
             @cdir = File.dirname(rake_file)
             self[:systempath] = @cdir + '/' + projectfile
             self[:altercfg].prepend(self[:sourcename] + '/') if self[:altercfg]
-            [:version, :bin, :build, :dcu, :alldebuginfo, :map, :defines, :releaseCandidate].each do |k|
+            [:version, :bin, :build, :dcu, :debug, :debuginfo, :map, :defines, :releaseCandidate].each do |k|
                 self[k] = vars[k] if vars.has_key?(k)
             end if vars
 

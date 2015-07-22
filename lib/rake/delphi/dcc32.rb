@@ -190,7 +190,7 @@ module Rake
         end
 
         def _alldebuginfo
-            return @debuginfo ? '-$D+ -$L+ -$YD' : '-$D- -$L- -$Y-'
+            return @debuginfo.nil? ?  '' : (@debuginfo ? '-$D+ -$L+ -$YD' : '-$D- -$L- -$Y-')
         end
 
         def outputs
