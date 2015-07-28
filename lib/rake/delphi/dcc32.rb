@@ -215,8 +215,10 @@ module Rake
 
         def build_args
             args = []
-            args << @dccTool.options << dcc_options << build? << console? << warnings? << hints? << quiet? << debug? << _alldebuginfo << _map
-            args << _defines << _writeableconst << _aliases << _namespaces
+            args << @dccTool.options << dcc_options << build? << console?
+            args << warnings? << hints? << quiet? << debug? << _alldebuginfo << _map
+            args << _defines << _writeableconst
+            args << _aliases << _namespaces
             args << _source << outputs << implicitpaths
             args.flatten
         end
