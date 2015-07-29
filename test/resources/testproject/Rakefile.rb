@@ -34,6 +34,7 @@ namespace :test do
         dpr[:quiet] = true
         # always reset :map
         dpr[:map] = false
+        dpr[:boolean] = :fast
         dpr[:resources_additional] = []
         dpr[:resources_additional] << 'resources' if opts[:useresources]
         dpr[:resources_additional] << 'resources_ext:extended_resources.dres' if opts[:useresources] === 'ext'

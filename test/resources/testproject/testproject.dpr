@@ -52,6 +52,15 @@ end;
 
 var
   s: string;
+
+{$IFDEF TEST_BOOLEAN_EXPRESSIONS}
+function WriteIfFullBooleanExpressions(): Boolean;
+begin
+  s := s + '-=BOOLEAN EXPRESSION=-';
+  Result := False;
+end;
+{$ENDIF TEST_BOOLEAN_EXPRESSIONS}
+
 begin
   {$IFDEF DEBUG}
   Write('DEBUG: ');
@@ -84,5 +93,9 @@ begin
       Free;
     end;
   {$ENDIF}
+  {$IFDEF TEST_BOOLEAN_EXPRESSIONS}
+  if False and WriteIfFullBooleanExpressions() then
+    ;
+  {$ENDIF TEST_BOOLEAN_EXPRESSIONS}
   WriteLn('testproject works', s);
 end.

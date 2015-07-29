@@ -20,7 +20,7 @@ module Rake
     private
         @@symbols = [:quiet, :assertions, :build, :optimization, :debug, :defines,
             :debuginfo, :localsymbols, :console, :warnings, :hints, :altercfg,
-            :includepaths, :writeableconst,
+            :includepaths, :writeableconst, :boolean,
             :map, :dcuoutput, :bploutput,
             :aliases, :platform, :platform_configuration, :namespaces,
             :dcpoutput, :dcu, :uselibrarypath, :usecfg, :dcc_options]
@@ -213,11 +213,15 @@ module Rake
             return '-$J' + (@writeableconst ? '+' : '-')
         end
 
+        def _complete_booleans
+            return @boolean.nil? ? '' : ('-$B' + (@boolean == :full ? '+' : '-'))
+        end
+
         def build_args
             args = []
             args << @dccTool.options << dcc_options << build? << console?
             args << warnings? << hints? << quiet? << debug? << _alldebuginfo << _map
-            args << _defines << _writeableconst
+            args << _defines << _writeableconst << _complete_booleans
             args << _aliases << _namespaces
             args << _source << outputs << implicitpaths
             args.flatten

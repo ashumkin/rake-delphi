@@ -96,6 +96,17 @@ public
             'DEBUG: testproject works')
     end
 
+    def test_compile_boolean_expressions_fast
+        _test_compile_and_output({:defines => 'TEST_BOOLEAN_EXPRESSIONS'},
+            'testproject works')
+    end
+
+    def test_compile_boolean_expressions_full
+        _test_compile_and_output({:boolean => :full,
+          :defines => 'TEST_BOOLEAN_EXPRESSIONS'},
+            'testproject works-=BOOLEAN EXPRESSION=-')
+    end
+
     def test_compile_debug_only_on
         _test_compile_and_output({:debug => true},
             'D+: testproject works', true)
