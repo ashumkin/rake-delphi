@@ -120,6 +120,7 @@ module Rake
         end
 
         def _paths(ppaths)
+            ppaths = ppaths.dup
             ppaths.map! do |p|
                 a = []
                 ['U', 'I', 'R', 'O'].each do |s|

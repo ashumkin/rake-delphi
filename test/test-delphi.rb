@@ -44,7 +44,8 @@ private
     end
 
     def _test_compile_and_output(prepare_args, output, check_map_file = false)
-        _test_prepare(prepare_args)
+        # we mayset `prepare_args` to nil to skip `_test_prepare`
+        _test_prepare(prepare_args) if prepare_args
         # reenable tasks (!!! after invoking 'test:prepare')
         task = ::Rake::Task['test:compile']
         task.reenable_chain
@@ -199,6 +200,13 @@ public
         paths = ['./ExplicitLib/']
         _test_compile_and_output({:defines => 'EXPLICIT_LIBS',
                 :includepaths => paths},
+            'testproject works-=WITH EXPLICIT LIBS=-')
+    end
+
+    def test_compile_with_explicit_libs_twice
+        test_compile_with_explicit_libs
+        # invoke 'test:compile' and run again but without 'test:prepare'
+        _test_compile_and_output(nil,
             'testproject works-=WITH EXPLICIT LIBS=-')
     end
 
